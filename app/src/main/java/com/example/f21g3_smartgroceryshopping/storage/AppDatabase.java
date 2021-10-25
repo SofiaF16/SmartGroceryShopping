@@ -8,6 +8,7 @@ import com.example.f21g3_smartgroceryshopping.storage.dao.SmartGroceryShoppingDa
 import com.example.f21g3_smartgroceryshopping.storage.entity.Dish;
 
 @Database(entities = {Dish.class}, version = 1)
+@TypeConverters(DateToLongConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract SmartGroceryShoppingDao smartGroceryShoppingDao();

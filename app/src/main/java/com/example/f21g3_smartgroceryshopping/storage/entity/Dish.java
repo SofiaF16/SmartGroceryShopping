@@ -4,13 +4,18 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(tableName = "Dish")
 public class Dish {
 
     @PrimaryKey
-    public int uid;
+    public final int uid;
 
     @ColumnInfo(name = "title")
-    public String title;
+    public final String title;
+
+    public Dish(int uid, String title) {
+        this.uid = uid;
+        this.title = title;
+    }
 
 }

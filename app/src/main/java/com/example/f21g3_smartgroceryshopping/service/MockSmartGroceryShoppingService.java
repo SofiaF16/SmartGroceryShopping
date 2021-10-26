@@ -9,7 +9,13 @@ public class MockSmartGroceryShoppingService implements SmartGroceryShoppingServ
     @Override
     public List<Dish> getDishes() {
         List<Dish> list = new ArrayList<>();
-        list.add(new Dish());
+        list.add(new Dish(1, "Test title"));
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
 
         return list;
     }

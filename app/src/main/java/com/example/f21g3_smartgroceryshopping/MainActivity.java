@@ -1,6 +1,7 @@
 package com.example.f21g3_smartgroceryshopping;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -26,8 +27,13 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
 
-        List<Dish> dishes = mainViewModel.getDishes();
-        Dish dish = dishes.get(0);
-        Log.d("myLogs", String.valueOf(dishes.size()));
+        mainViewModel.getDishesResponse().observe(this, new Observer<List<Dish>>() {
+            @Override
+            public void onChanged(List<Dish> dishes) {
+                Log.d("myLogs", String.valueOf(dishes.size()));
+            }
+        });
+
+        mainViewModel.getDishes();
     }
 }

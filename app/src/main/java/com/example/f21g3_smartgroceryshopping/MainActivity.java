@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.f21g3_smartgroceryshopping.response.LoadResponse;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.viewmodel.MainViewModel;
 
@@ -27,10 +28,15 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
 
-        mainViewModel.getDishesResponse().observe(this, new Observer<List<Dish>>() {
+        mainViewModel.getDishesResponse().observe(this, new Observer<LoadResponse<List<Dish>>>() {
             @Override
-            public void onChanged(List<Dish> dishes) {
-                Log.d("myLogs", String.valueOf(dishes.size()));
+            public void onChanged(LoadResponse<List<Dish>> dishLoadResponse) {
+                Log.d("myLogs", "dishLoadResponse");
+                if(dishLoadResponse.getResponse() != null) {
+                    List<Dish> dishes = dishLoadResponse.getResponse();
+
+                    Log.d("myLogs", String.valueOf(dishes.size()));
+                }
             }
         });
 

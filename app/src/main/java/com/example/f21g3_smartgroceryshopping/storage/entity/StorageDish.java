@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Dish")
-public class Dish {
+public class StorageDish {
 
     @PrimaryKey
     public final int uid;
@@ -13,7 +13,7 @@ public class Dish {
     @ColumnInfo(name = "title")
     public final String title;
 
-    public Dish(int uid, String title) {
+    public StorageDish(int uid, String title) {
         this.uid = uid;
         this.title = title;
     }

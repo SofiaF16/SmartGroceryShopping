@@ -11,6 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.F21G3_SmartGroceryShopping">
         <activity
+            android:name=".CartActivity"
+            android:exported="true" />
+        <activity
+            android:name=".OrdersHistoryActivity"
+            android:exported="true" />
+        <activity
             android:name=".DishDetailsActivity"
             android:exported="true" />
         <activity

@@ -1,6 +1,5 @@
 package com.example.f21g3_smartgroceryshopping.viewmodel;
 
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -13,8 +12,6 @@ import com.example.f21g3_smartgroceryshopping.response.RepositoryResponse;
 import com.example.f21g3_smartgroceryshopping.response.SuccessLoadResponse;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
-import com.example.f21g3_smartgroceryshopping.storage.entity.StorageCartItem;
-import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDish;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDishWithIngredients;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageIngredient;
 
@@ -93,6 +90,10 @@ public class MainViewModel extends ViewModel {
         }
 
         return result;
+    }
+
+    public void clearCart() {
+        mainRepository.deleteAllCartItems();
     }
 
 }

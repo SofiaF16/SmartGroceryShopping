@@ -38,4 +38,7 @@ public abstract class SmartGroceryShoppingDao {
     @Query("SELECT * FROM Cart")
     public abstract LiveData<List<StorageCartItem>> getCartItems();
 
+    @Query("DELETE FROM Cart")
+    public abstract void deleteAllCartItems();
+
 }

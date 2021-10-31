@@ -74,4 +74,8 @@ public class MainRepository {
         return shoppingDao.getCartItems();
     }
 
+    public void deleteAllCartItems() {
+        shoppingDao.deleteAllCartItems();
+    }
+
 }

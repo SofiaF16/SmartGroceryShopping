@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "5c60fc1f21b222bfde6871aee1962f39",
+    "identityHash": "046e3075a4ad5817f07982d3242d0a33",
     "entities": [
       {
         "tableName": "Dish",
@@ -88,11 +88,17 @@
       },
       {
         "tableName": "Ingredient",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER NOT NULL, `title` TEXT, `quantity` INTEGER NOT NULL, `quantityUnit` TEXT, PRIMARY KEY(`uid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER NOT NULL, `fk_dish` INTEGER NOT NULL, `title` TEXT, `quantity` INTEGER NOT NULL, `quantityUnit` TEXT, PRIMARY KEY(`uid`), FOREIGN KEY(`fk_dish`) REFERENCES `Dish`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "uid",
             "columnName": "uid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fk_dish",
+            "columnName": "fk_dish",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -122,7 +128,19 @@
           "autoGenerate": false
         },
         "indices": [],
-        "foreignKeys": []
+        "foreignKeys": [
+          {
+            "table": "Dish",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "fk_dish"
+            ],
+            "referencedColumns": [
+              "uid"
+            ]
+          }
+        ]
       },
       {
         "tableName": "Order",
@@ -154,7 +172,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5c60fc1f21b222bfde6871aee1962f39')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '046e3075a4ad5817f07982d3242d0a33')"
     ]
   }
 }

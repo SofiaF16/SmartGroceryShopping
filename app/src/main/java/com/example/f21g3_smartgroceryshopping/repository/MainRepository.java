@@ -43,7 +43,7 @@ public class MainRepository {
         List<StorageDishWithIngredients> result = new ArrayList<>(list.size());
 
         for (Dish d: list) {
-            List<StorageIngredient> storageIngredients = toStorageIngredients(d.getIngredients());
+            List<StorageIngredient> storageIngredients = toStorageIngredients(d, d.getIngredients());
 
             result.add(new StorageDishWithIngredients(
                     new StorageDish(d.getUid(),
@@ -58,10 +58,10 @@ public class MainRepository {
         return result;
     }
 
-    private List<StorageIngredient> toStorageIngredients(List<Ingredient> ingredients) {
+    private List<StorageIngredient> toStorageIngredients(Dish dish, List<Ingredient> ingredients) {
         List<StorageIngredient> result = new ArrayList<>(ingredients.size());
         for (Ingredient ingredient: ingredients) {
-            result.add(new StorageIngredient(ingredient.getUid(), ingredient.getTitle(), ingredient.getQuantity(), ingredient.getQuantityUnit()));
+            result.add(new StorageIngredient(ingredient.getUid(), dish.getUid(), ingredient.getTitle(), ingredient.getQuantity(), ingredient.getQuantityUnit()));
         }
 
         return result;

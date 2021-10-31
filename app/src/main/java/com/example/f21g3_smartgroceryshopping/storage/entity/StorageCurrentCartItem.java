@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "Cart")
-public class StorageCartItem {
+public class StorageCurrentCartItem {
 
     @PrimaryKey(autoGenerate = true)
     public int cartItemKey;
@@ -16,7 +16,7 @@ public class StorageCartItem {
     @ColumnInfo(name = "portions")
     public final int portions;
 
-    public StorageCartItem(int dishId, int portions) {
+    public StorageCurrentCartItem(int dishId, int portions) {
         this.dishId = dishId;
         this.portions = portions;
     }

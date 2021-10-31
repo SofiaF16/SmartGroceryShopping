@@ -11,13 +11,13 @@ public class StorageOrderWithCartItems {
 
     @Relation(
             parentColumn = "orderId",
-            entityColumn = "cartItemKey"
+            entityColumn = "orderItemKey"
     )
-    public final List<StorageCartItem> cartItems;
+    public final List<StorageOrderItem> orderItems;
 
-    public StorageOrderWithCartItems(StorageOrder storageOrder, List<StorageCartItem> cartItems) {
+    public StorageOrderWithCartItems(StorageOrder storageOrder, List<StorageOrderItem> orderItems) {
         this.storageOrder = storageOrder;
-        this.cartItems = cartItems;
+        this.orderItems = orderItems;
     }
 
 }

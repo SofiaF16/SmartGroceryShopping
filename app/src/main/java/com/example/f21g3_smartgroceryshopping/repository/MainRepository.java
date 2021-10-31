@@ -8,10 +8,12 @@ import com.example.f21g3_smartgroceryshopping.service.SmartGroceryShoppingServic
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 import com.example.f21g3_smartgroceryshopping.storage.dao.SmartGroceryShoppingDao;
-import com.example.f21g3_smartgroceryshopping.storage.entity.StorageCartItem;
+import com.example.f21g3_smartgroceryshopping.storage.entity.StorageCurrentCartItem;
+import com.example.f21g3_smartgroceryshopping.storage.entity.StorageCurrentCartItemAndDishWithIngredients;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDish;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDishWithIngredients;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageIngredient;
+import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrderWithCartItems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,8 +72,36 @@ public class MainRepository {
         return result;
     }
 
-    public LiveData<List<StorageCartItem>> getCartItems() {
+    public LiveData<List<StorageCurrentCartItem>> getCartItems() {
         return shoppingDao.getCartItems();
+    }
+
+    public void deleteAllCartItems() {
+        shoppingDao.deleteAllCartItems();
+    }
+
+    public RepositoryResponse<StorageDishWithIngredients> getStorageDishBy(int dishId) {
+        try {
+            return new RepositoryResponse<>(shoppingDao.getStorageDishBy(dishId));
+        } catch (Exception e) {
+            return new RepositoryResponse<>(e);
+        }
+    }
+
+    public long addToCart(StorageCurrentCartItem storageCurrentCartItem) {
+        return shoppingDao.insertCartItem(storageCurrentCartItem);
+    }
+
+    public RepositoryResponse<List<StorageCurrentCartItemAndDishWithIngredients>> getCartItemsWithDishesAndIngredients() {
+        try {
+            return new RepositoryResponse<>(shoppingDao.getCartItemsWithDishesAndIngredients());
+        } catch (Exception e) {
+            return new RepositoryResponse<>(e);
+        }
+    }
+
+    public long[] addToHistory(StorageOrderWithCartItems storageOrder) {
+        return shoppingDao.insert(storageOrder);
     }
 
 }

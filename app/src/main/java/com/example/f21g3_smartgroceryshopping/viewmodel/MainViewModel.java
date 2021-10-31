@@ -1,6 +1,8 @@
 package com.example.f21g3_smartgroceryshopping.viewmodel;
 
-import androidx.arch.core.util.Function;
+import static com.example.f21g3_smartgroceryshopping.util.Converter.toDish;
+import static com.example.f21g3_smartgroceryshopping.util.Converter.toIngredients;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -13,10 +15,7 @@ import com.example.f21g3_smartgroceryshopping.response.RepositoryResponse;
 import com.example.f21g3_smartgroceryshopping.response.SuccessLoadResponse;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
-import com.example.f21g3_smartgroceryshopping.storage.entity.StorageCartItem;
-import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDish;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDishWithIngredients;
-import com.example.f21g3_smartgroceryshopping.storage.entity.StorageIngredient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +46,8 @@ public class MainViewModel extends ViewModel {
         return cartItems;
     }
 
-    public void getDishes(){
+    public void loadDishes(){
         CompletableFuture.runAsync(() -> {
-
             dishesResponse.postValue(new LoadingLoadResponse<>(new ArrayList<>()));
             RepositoryResponse<List<StorageDishWithIngredients>> storageDishesResponse = mainRepository.getAllDishes();
 
@@ -72,27 +70,14 @@ public class MainViewModel extends ViewModel {
 
         for (StorageDishWithIngredients storageDish: list) {
             List<Ingredient> ingredients = toIngredients(storageDish.ingredients);
-
-            result.add(new Dish(storageDish.storageDish.uid,
-                    storageDish.storageDish.title,
-                    storageDish.storageDish.shortDescription,
-                    storageDish.storageDish.longDescription,
-                    storageDish.storageDish.imageUrl,
-                    storageDish.storageDish.isFavorite,
-                    ingredients));
+            result.add(toDish(storageDish.storageDish, ingredients));
         }
 
         return result;
     }
 
-    private List<Ingredient> toIngredients(List<StorageIngredient> ingredients) {
-        List<Ingredient> result = new ArrayList<>(ingredients.size());
-
-        for (StorageIngredient ingredient: ingredients) {
-            result.add(new Ingredient(ingredient.uid, ingredient.title, ingredient.quantity, ingredient.quantityUnit));
-        }
-
-        return result;
+    public void clearCart() {
+        mainRepository.deleteAllCartItems();
     }
 
 }

@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mainViewModel.getDishes();
+        mainViewModel.loadDishes();
 
         mainViewModel.getCartSize().observe(this, new Observer<Integer>() {
             @Override

@@ -1,11 +1,8 @@
 package com.example.f21g3_smartgroceryshopping.storage.entity;
 
 import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import java.util.List;
 
 @Entity(tableName = "Dish")
 public class StorageDish {

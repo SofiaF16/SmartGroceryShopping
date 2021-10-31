@@ -15,7 +15,7 @@ public class StorageIngredient {
     @PrimaryKey
     public final int uid;
 
-    @ColumnInfo(name = "fk_dish")
+    @ColumnInfo(name = "fk_dish", index = true)
     public int fk_dish;
 
     @ColumnInfo(name = "title")

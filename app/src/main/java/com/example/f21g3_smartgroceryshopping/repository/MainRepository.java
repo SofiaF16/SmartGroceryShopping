@@ -1,11 +1,14 @@
 package com.example.f21g3_smartgroceryshopping.repository;
 
 
+import androidx.lifecycle.LiveData;
+
 import com.example.f21g3_smartgroceryshopping.response.RepositoryResponse;
 import com.example.f21g3_smartgroceryshopping.service.SmartGroceryShoppingService;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 import com.example.f21g3_smartgroceryshopping.storage.dao.SmartGroceryShoppingDao;
+import com.example.f21g3_smartgroceryshopping.storage.entity.StorageCartItem;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDish;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDishWithIngredients;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageIngredient;
@@ -17,8 +20,8 @@ import javax.inject.Inject;
 
 public class MainRepository {
 
-    private SmartGroceryShoppingService shoppingService;
-    private SmartGroceryShoppingDao shoppingDao;
+    private final SmartGroceryShoppingService shoppingService;
+    private final SmartGroceryShoppingDao shoppingDao;
 
     @Inject
     public MainRepository(SmartGroceryShoppingService shoppingService, SmartGroceryShoppingDao shoppingDao) {
@@ -65,6 +68,10 @@ public class MainRepository {
         }
 
         return result;
+    }
+
+    public LiveData<List<StorageCartItem>> getCartItems() {
+        return shoppingDao.getCartItems();
     }
 
 }

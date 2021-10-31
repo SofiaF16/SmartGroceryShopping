@@ -1,12 +1,14 @@
 package com.example.f21g3_smartgroceryshopping.storage.dao;
 
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
+import com.example.f21g3_smartgroceryshopping.storage.entity.StorageCartItem;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDish;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDishWithIngredients;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageIngredient;
@@ -30,8 +32,10 @@ public abstract class SmartGroceryShoppingDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract void insertIngredients(List<StorageIngredient> ingredients);
 
-    @Transaction
     @Query("SELECT * FROM Dish")
     public abstract List<StorageDishWithIngredients> getAllDishesWithIngredients();
+
+    @Query("SELECT * FROM Cart")
+    public abstract LiveData<List<StorageCartItem>> getCartItems();
 
 }

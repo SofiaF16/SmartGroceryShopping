@@ -1,7 +1,9 @@
 package com.example.f21g3_smartgroceryshopping.viewmodel;
 
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import com.example.f21g3_smartgroceryshopping.repository.MainRepository;
 import com.example.f21g3_smartgroceryshopping.response.ErrorLoadResponse;
@@ -11,6 +13,7 @@ import com.example.f21g3_smartgroceryshopping.response.RepositoryResponse;
 import com.example.f21g3_smartgroceryshopping.response.SuccessLoadResponse;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
+import com.example.f21g3_smartgroceryshopping.storage.entity.StorageCartItem;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDish;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDishWithIngredients;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageIngredient;
@@ -18,6 +21,7 @@ import com.example.f21g3_smartgroceryshopping.storage.entity.StorageIngredient;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
 import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
@@ -25,16 +29,22 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class MainViewModel extends ViewModel {
 
     private final MutableLiveData<LoadResponse<List<Dish>>> dishesResponse = new MutableLiveData<>();
+    private final LiveData<Integer> cartItems;
 
     private final MainRepository mainRepository;
 
     @Inject
     public MainViewModel(MainRepository mainRepository) {
         this.mainRepository = mainRepository;
+        cartItems = Transformations.map(this.mainRepository.getCartItems(), List::size);
     }
 
     public LiveData<LoadResponse<List<Dish>>> getDishesResponse() {
         return dishesResponse;
+    }
+
+    public LiveData<Integer> getCartSize() {
+        return cartItems;
     }
 
     public void getDishes(){

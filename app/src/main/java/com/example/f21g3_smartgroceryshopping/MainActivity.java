@@ -46,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mainViewModel.getDishes();
+
+        mainViewModel.getCartSize().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                Log.d("myLogs", "getCartSize " + integer);
+            }
+        });
     }
 
     //Test Commit

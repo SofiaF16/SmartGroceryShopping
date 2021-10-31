@@ -36,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
                     List<Dish> dishes = dishLoadResponse.getResponse();
 
                     Log.d("myLogs", String.valueOf(dishes.size()));
+
+                    if(dishes.size() != 0) {
+                        Log.d("myLogs", String.valueOf(dishes.get(0)));
+                    }
+
                 }
             }
         });

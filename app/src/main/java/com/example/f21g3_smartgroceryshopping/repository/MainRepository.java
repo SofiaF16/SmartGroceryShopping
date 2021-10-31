@@ -3,8 +3,12 @@ package com.example.f21g3_smartgroceryshopping.repository;
 
 import com.example.f21g3_smartgroceryshopping.response.RepositoryResponse;
 import com.example.f21g3_smartgroceryshopping.service.SmartGroceryShoppingService;
+import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
+import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 import com.example.f21g3_smartgroceryshopping.storage.dao.SmartGroceryShoppingDao;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDish;
+import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDishWithIngredients;
+import com.example.f21g3_smartgroceryshopping.storage.entity.StorageIngredient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,23 +26,42 @@ public class MainRepository {
         this.shoppingDao = shoppingDao;
     }
 
-    public RepositoryResponse<List<StorageDish>> getAllDishes() {
+    public RepositoryResponse<List<StorageDishWithIngredients>> getAllDishes() {
         try {
-            List<com.example.f21g3_smartgroceryshopping.service.entity.Dish> serviceDishes = shoppingService.getDishes();
-            List<StorageDish> storageStorageDishes = toStorageDish(serviceDishes);
+            List<Dish> serviceDishes = shoppingService.getDishes();
+            List<StorageDishWithIngredients> storageStorageDishes = toStorageDishWithIngredients(serviceDishes);
 
             shoppingDao.insertAll(storageStorageDishes);
 
-            return new RepositoryResponse<>(shoppingDao.getAllDishes());
+            return new RepositoryResponse<>(shoppingDao.getAllDishesWithIngredients());
         } catch (Exception e) {
-            return new RepositoryResponse<>(shoppingDao.getAllDishes(), e);
+            return new RepositoryResponse<>(shoppingDao.getAllDishesWithIngredients(), e);
         }
     }
 
-    private List<StorageDish> toStorageDish(List<com.example.f21g3_smartgroceryshopping.service.entity.Dish> list) {
-        List<StorageDish> result = new ArrayList<>(list.size());
-        for (com.example.f21g3_smartgroceryshopping.service.entity.Dish d: list) {
-            result.add(new StorageDish(d.getUid(), d.getTitle()));
+    private List<StorageDishWithIngredients> toStorageDishWithIngredients(List<Dish> list) {
+        List<StorageDishWithIngredients> result = new ArrayList<>(list.size());
+
+        for (Dish d: list) {
+            List<StorageIngredient> storageIngredients = toStorageIngredients(d.getIngredients());
+
+            result.add(new StorageDishWithIngredients(
+                    new StorageDish(d.getUid(),
+                    d.getTitle(),
+                    d.getShortDescription(),
+                    d.getLongDescription(),
+                    d.getImageUrl(),
+                    d.isFavorite()),
+                    storageIngredients));
+        }
+
+        return result;
+    }
+
+    private List<StorageIngredient> toStorageIngredients(List<Ingredient> ingredients) {
+        List<StorageIngredient> result = new ArrayList<>(ingredients.size());
+        for (Ingredient ingredient: ingredients) {
+            result.add(new StorageIngredient(ingredient.getUid(), ingredient.getTitle(), ingredient.getQuantity(), ingredient.getQuantityUnit()));
         }
 
         return result;

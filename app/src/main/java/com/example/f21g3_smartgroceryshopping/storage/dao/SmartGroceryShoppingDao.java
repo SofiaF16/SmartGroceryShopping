@@ -74,4 +74,7 @@ public abstract class SmartGroceryShoppingDao {
     @Insert
     public abstract long[] insert(List<StorageOrderItem> storageOrderItems);
 
+    @Query("DELETE FROM Cart")
+    public abstract void deleteAllCartItems();
+
 }

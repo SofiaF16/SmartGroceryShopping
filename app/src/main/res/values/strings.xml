@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Smart Grocery Shopping</string>
+    <string name="txtDishName">Dish Name</string>
+    <string name="txtDishDesc">Dish Description</string>
+    <string name="imgViewDesc">Dish Image</string>
+    <string name="fabCartDesc">View Cart</string>
+    <string name="iconToolbarCartDesc">Meal Cart</string>
 </resources>

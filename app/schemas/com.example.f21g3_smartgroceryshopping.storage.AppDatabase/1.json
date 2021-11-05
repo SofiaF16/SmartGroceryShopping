@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a8f2cd340469f8aa34e6702ee8efc1d2",
+    "identityHash": "988596e84db853b59f96b2cfd7908022",
     "entities": [
       {
         "tableName": "Dish",
@@ -56,7 +56,7 @@
       },
       {
         "tableName": "Cart",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cartItemKey` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `dishId` INTEGER NOT NULL, `portions` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cartItemKey` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `dishId` INTEGER NOT NULL, `dishTitle` TEXT, `portions` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "cartItemKey",
@@ -69,6 +69,12 @@
             "columnName": "dishId",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "dishTitle",
+            "columnName": "dishTitle",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "portions",
@@ -179,7 +185,7 @@
       },
       {
         "tableName": "OrderItem",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`orderId` INTEGER NOT NULL, `dishId` INTEGER NOT NULL, `portions` INTEGER NOT NULL, PRIMARY KEY(`orderId`), FOREIGN KEY(`orderId`) REFERENCES `Order`(`orderId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`orderId` INTEGER NOT NULL, `dishId` INTEGER NOT NULL, `dishTitle` TEXT, `portions` INTEGER NOT NULL, PRIMARY KEY(`orderId`), FOREIGN KEY(`orderId`) REFERENCES `Order`(`orderId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "orderId",
@@ -192,6 +198,12 @@
             "columnName": "dishId",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "dishTitle",
+            "columnName": "dishTitle",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "portions",
@@ -225,7 +237,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a8f2cd340469f8aa34e6702ee8efc1d2')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '988596e84db853b59f96b2cfd7908022')"
     ]
   }
 }

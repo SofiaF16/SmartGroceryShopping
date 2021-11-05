@@ -14,6 +14,7 @@ import com.example.f21g3_smartgroceryshopping.response.LoadingLoadResponse;
 import com.example.f21g3_smartgroceryshopping.response.RepositoryResponse;
 import com.example.f21g3_smartgroceryshopping.response.SuccessLoadResponse;
 import com.example.f21g3_smartgroceryshopping.service.entity.CartItem;
+import com.example.f21g3_smartgroceryshopping.service.entity.CurrentCartItem;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageCurrentCartItem;
@@ -21,7 +22,7 @@ import com.example.f21g3_smartgroceryshopping.storage.entity.StorageCurrentCartI
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDishWithIngredients;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrder;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrderItem;
-import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrderWithCartItems;
+import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrderWithOrderItems;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,9 +38,9 @@ public class CartViewModel extends ViewModel {
 
     private static final long SLEEP_TIME = 3000;
 
-    private final MutableLiveData<LoadResponse<List<CartItem>>> cartItems = new MutableLiveData<>();
-    private final MutableLiveData<LoadResponse<Ingredient>> fullIngredientsList = new MutableLiveData<>();
-    private final MutableLiveData<LoadResponse<String>> postOrderStatus = new MutableLiveData<>();
+    private final MutableLiveData<LoadResponse<List<CartItem>>> cartItemsResponse = new MutableLiveData<>();
+    private final MutableLiveData<LoadResponse<List<Ingredient>>> fullIngredientsListResponse = new MutableLiveData<>();
+    private final MutableLiveData<LoadResponse<String>> postOrderStatusResponse = new MutableLiveData<>();
 
     private final MainRepository mainRepository;
 
@@ -50,24 +51,26 @@ public class CartViewModel extends ViewModel {
         this.mainRepository = mainRepository;
     }
 
-    public LiveData<LoadResponse<List<CartItem>>> getCartItems() {
-        return cartItems;
+    public LiveData<LoadResponse<List<CartItem>>> getCartItemsResponse() {
+        return cartItemsResponse;
     }
 
-    public LiveData<LoadResponse<Ingredient>> getIngredientsList() {
-        return fullIngredientsList;
+    public LiveData<LoadResponse<List<Ingredient>>> getIngredientsListResponse() {
+        return fullIngredientsListResponse;
     }
 
-    public LiveData<LoadResponse<String>> getPostOrderStatus() {
-        return postOrderStatus;
+    public LiveData<LoadResponse<String>> getPostOrderStatusResponse() {
+        return postOrderStatusResponse;
     }
 
     public void loadCartItems() {
-        CompletableFuture.runAsync(() -> {
-            RepositoryResponse<List<StorageCurrentCartItemAndDishWithIngredients>> repositoryResponse = mainRepository.getCartItemsWithDishesAndIngredients();
-            LoadResponse<List<CartItem>> loadResponse = prepareResponse(repositoryResponse);
-            cartItems.postValue(loadResponse);
-        });
+        CompletableFuture.runAsync(this::refreshCartItems);
+    }
+
+    private void refreshCartItems() {
+        RepositoryResponse<List<StorageCurrentCartItemAndDishWithIngredients>> repositoryResponse = mainRepository.getCartItemsWithDishesAndIngredients();
+        LoadResponse<List<CartItem>> loadResponse = prepareResponse(repositoryResponse);
+        cartItemsResponse.postValue(loadResponse);
     }
 
     private LoadResponse<List<CartItem>> prepareResponse(RepositoryResponse<List<StorageCurrentCartItemAndDishWithIngredients>> repositoryResponse) {
@@ -93,16 +96,16 @@ public class CartViewModel extends ViewModel {
 
     public void postOrder() {
         CompletableFuture.runAsync(() -> {
-            postOrderStatus.postValue(new LoadingLoadResponse<>(""));
+            postOrderStatusResponse.postValue(new LoadingLoadResponse<>(""));
 
             internetDelay();
 
             List<StorageCurrentCartItem> currentCartItems = mainRepository.getCartItems().getValue();
-            StorageOrderWithCartItems storageOrderWithCartItems = createStorageOrderWithCartItems(currentCartItems);
-            long[] result = mainRepository.addToHistory(storageOrderWithCartItems);
+            StorageOrderWithOrderItems storageOrderWithOrderItems = createStorageOrderWithCartItems(currentCartItems);
+            long[] result = mainRepository.addToHistory(storageOrderWithOrderItems);
 
             LoadResponse<String> response = prepareResponse(result);
-            postOrderStatus.postValue(response);
+            postOrderStatusResponse.postValue(response);
         });
     }
 
@@ -114,10 +117,10 @@ public class CartViewModel extends ViewModel {
         }
     }
 
-    private StorageOrderWithCartItems createStorageOrderWithCartItems(List<StorageCurrentCartItem> currentCartItems) {
+    private StorageOrderWithOrderItems createStorageOrderWithCartItems(List<StorageCurrentCartItem> currentCartItems) {
         List<StorageOrderItem> storageOrderItems = toStorageOrderItems(currentCartItems);
         StorageOrder storageOrder = new StorageOrder(new Date());
-        return new StorageOrderWithCartItems(storageOrder, storageOrderItems);
+        return new StorageOrderWithOrderItems(storageOrder, storageOrderItems);
     }
 
     private List<StorageOrderItem> toStorageOrderItems(List<StorageCurrentCartItem> currentCartItems) {
@@ -130,7 +133,7 @@ public class CartViewModel extends ViewModel {
     }
 
     private StorageOrderItem toStorageOrderItem(StorageCurrentCartItem storageCurrentCartItem) {
-        return new StorageOrderItem(storageCurrentCartItem.dishId, storageCurrentCartItem.portions);
+        return new StorageOrderItem(storageCurrentCartItem.dishId, storageCurrentCartItem.dishTitle, storageCurrentCartItem.portions);
     }
 
     private LoadResponse<String> prepareResponse(long[] result) {
@@ -140,5 +143,30 @@ public class CartViewModel extends ViewModel {
 
         return new ErrorLoadResponse<>("");
     }
+
+    public void updateCartItem(final CurrentCartItem currentCartItem) {
+        CompletableFuture.runAsync(() -> {
+            long l = mainRepository.updateCurrentCartItem(currentCartItem);
+
+            if(l != -1) {
+                refreshCartItems();
+            } else {
+                cartItemsResponse.postValue(new ErrorLoadResponse<>(cartItemsResponse.getValue().getResponse(), new Exception("Update failed")));
+            }
+        });
+    }
+
+    public void deleteCartItem(final CurrentCartItem currentCartItem) {
+        CompletableFuture.runAsync(() -> {
+            int l = mainRepository.deleteCurrentCartItem(currentCartItem);
+
+            if(l != -1) {
+                refreshCartItems();
+            } else {
+                cartItemsResponse.postValue(new ErrorLoadResponse<>(cartItemsResponse.getValue().getResponse(), new Exception("Delete failed")));
+            }
+        });
+    }
+
 
 }

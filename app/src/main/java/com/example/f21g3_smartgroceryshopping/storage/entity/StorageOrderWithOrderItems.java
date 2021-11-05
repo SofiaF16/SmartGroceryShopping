@@ -4,18 +4,18 @@ import androidx.room.Embedded;
 import androidx.room.Relation;
 import java.util.List;
 
-public class StorageOrderWithCartItems {
+public class StorageOrderWithOrderItems {
 
     @Embedded
     public final StorageOrder storageOrder;
 
     @Relation(
             parentColumn = "orderId",
-            entityColumn = "orderItemKey"
+            entityColumn = "orderId"
     )
     public final List<StorageOrderItem> orderItems;
 
-    public StorageOrderWithCartItems(StorageOrder storageOrder, List<StorageOrderItem> orderItems) {
+    public StorageOrderWithOrderItems(StorageOrder storageOrder, List<StorageOrderItem> orderItems) {
         this.storageOrder = storageOrder;
         this.orderItems = orderItems;
     }

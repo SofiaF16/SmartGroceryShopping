@@ -11,14 +11,17 @@ public class StorageCurrentCartItem {
     public int cartItemKey;
 
     @ColumnInfo(name = "dishId")
-    public final int dishId;
+    public final long dishId;
+
+    @ColumnInfo(name = "dishTitle")
+    public final String dishTitle;
 
     @ColumnInfo(name = "portions")
     public final int portions;
 
-    public StorageCurrentCartItem(int dishId, int portions) {
+    public StorageCurrentCartItem(long dishId, String dishTitle, int portions) {
         this.dishId = dishId;
+        this.dishTitle = dishTitle;
         this.portions = portions;
     }
-
 }

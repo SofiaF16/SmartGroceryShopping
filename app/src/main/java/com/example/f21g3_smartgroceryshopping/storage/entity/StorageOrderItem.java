@@ -16,13 +16,17 @@ public class StorageOrderItem {
     public long orderId;
 
     @ColumnInfo(name = "dishId")
-    public final int dishId;
+    public final long dishId;
+
+    @ColumnInfo(name = "dishTitle")
+    public final String dishTitle;
 
     @ColumnInfo(name = "portions")
     public final int portions;
 
-    public StorageOrderItem(int dishId, int portions) {
+    public StorageOrderItem(long dishId, String dishTitle, int portions) {
         this.dishId = dishId;
+        this.dishTitle = dishTitle;
         this.portions = portions;
     }
 

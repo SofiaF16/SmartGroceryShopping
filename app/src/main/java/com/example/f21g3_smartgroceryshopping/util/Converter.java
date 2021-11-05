@@ -11,6 +11,10 @@ import java.util.List;
 public class Converter {
 
     public static List<Ingredient> toIngredients(List<StorageIngredient> ingredients) {
+        if(ingredients == null) {
+            return new ArrayList<>();
+        }
+
         List<Ingredient> result = new ArrayList<>(ingredients.size());
 
         for (StorageIngredient ingredient: ingredients) {

@@ -19,7 +19,7 @@ public class MockSmartGroceryShoppingService implements SmartGroceryShoppingServ
         firstDishIngredients.add(onion);
         firstDishIngredients.add(pepper);
 
-        Dish firstDish = new Dish(1, "dish", "sort descr", "longdescr", "url", false, firstDishIngredients);
+        Dish firstDish = new Dish(1, "dish", "sort descr", "longdescr", "https://www.foodiecrush.com/wp-content/uploads/2019/05/Grilled-Salmon-foodiecrush.com-023.jpg", false, firstDishIngredients);
 
         Ingredient jam = new Ingredient(4, "jam", 15, "g");
         Ingredient salt = new Ingredient(5, "salt", 27, "g");
@@ -30,7 +30,7 @@ public class MockSmartGroceryShoppingService implements SmartGroceryShoppingServ
         secondDishIngredients.add(salt);
         secondDishIngredients.add(apples);
 
-        Dish secondDish = new Dish(2, "dish2", "dish2 sort descr", "dish2 longdescr", "dish2url", false, secondDishIngredients);
+        Dish secondDish = new Dish(2, "dish2", "dish2 sort descr", "dish2 longdescr", "https://www.foodiecrush.com/wp-content/uploads/2019/05/Grilled-Salmon-foodiecrush.com-023.jpg", false, secondDishIngredients);
 
 
         List<Dish> list = new ArrayList<>();

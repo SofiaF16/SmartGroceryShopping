@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.f21g3_smartgroceryshopping.response.RepositoryResponse;
 import com.example.f21g3_smartgroceryshopping.service.SmartGroceryShoppingService;
+import com.example.f21g3_smartgroceryshopping.service.entity.CurrentCartItem;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 import com.example.f21g3_smartgroceryshopping.storage.dao.SmartGroceryShoppingDao;
@@ -13,7 +14,7 @@ import com.example.f21g3_smartgroceryshopping.storage.entity.StorageCurrentCartI
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDish;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDishWithIngredients;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageIngredient;
-import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrderWithCartItems;
+import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrderWithOrderItems;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,10 @@ public class MainRepository {
         return shoppingDao.insertCartItem(storageCurrentCartItem);
     }
 
+    public long[] addToCart(List<StorageCurrentCartItem> storageCurrentCartItems) {
+        return shoppingDao.insertCartItem(storageCurrentCartItems);
+    }
+
     public RepositoryResponse<List<StorageCurrentCartItemAndDishWithIngredients>> getCartItemsWithDishesAndIngredients() {
         try {
             return new RepositoryResponse<>(shoppingDao.getCartItemsWithDishesAndIngredients());
@@ -100,8 +105,31 @@ public class MainRepository {
         }
     }
 
-    public long[] addToHistory(StorageOrderWithCartItems storageOrder) {
+    public long[] addToHistory(StorageOrderWithOrderItems storageOrder) {
         return shoppingDao.insert(storageOrder);
+    }
+
+    public RepositoryResponse<List<StorageOrderWithOrderItems>> getAllOrders() {
+        try {
+            return new RepositoryResponse<>(shoppingDao.getAllOrders());
+        } catch (Exception e) {
+            return new RepositoryResponse<>(e);
+        }
+    }
+
+    public long updateCurrentCartItem(CurrentCartItem cartItem) {
+        return shoppingDao.updateCartItems(toStorageCurrentCartItem(cartItem));
+    }
+
+    public int deleteCurrentCartItem(CurrentCartItem cartItem) {
+        return shoppingDao.deleteCartItem(cartItem.getCartItemKey());
+    }
+
+    private StorageCurrentCartItem toStorageCurrentCartItem(CurrentCartItem cartItem) {
+        StorageCurrentCartItem currentCartItem = new StorageCurrentCartItem(cartItem.getDishId(), cartItem.getDishTitle(), cartItem.getPortions());
+        currentCartItem.cartItemKey = cartItem.getCartItemKey();
+
+        return currentCartItem;
     }
 
 }

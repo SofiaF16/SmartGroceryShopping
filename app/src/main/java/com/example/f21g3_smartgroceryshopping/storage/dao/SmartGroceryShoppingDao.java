@@ -15,7 +15,7 @@ import com.example.f21g3_smartgroceryshopping.storage.entity.StorageDishWithIngr
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageIngredient;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrder;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrderItem;
-import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrderWithCartItems;
+import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrderWithOrderItems;
 
 import java.util.List;
 
@@ -43,8 +43,9 @@ public abstract class SmartGroceryShoppingDao {
     @Query("SELECT * FROM Cart")
     public abstract LiveData<List<StorageCurrentCartItem>> getCartItems();
 
-    @Query("DELETE FROM Cart")
-    public abstract void deleteAllCartItems();
+    @Query("SELECT * FROM `Order`")
+    @Transaction
+    public abstract List<StorageOrderWithOrderItems> getAllOrders();
 
     @Query("SELECT * FROM Dish WHERE uid=:dishId")
     @Transaction
@@ -53,19 +54,25 @@ public abstract class SmartGroceryShoppingDao {
     @Insert
     public abstract long insertCartItem(StorageCurrentCartItem cartItem);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    public abstract long updateCartItems(StorageCurrentCartItem cartItem);
+
+    @Insert
+    public abstract long[] insertCartItem(List<StorageCurrentCartItem> cartItems);
+
     @Query("SELECT * FROM Cart")
     @Transaction
     public abstract List<StorageCurrentCartItemAndDishWithIngredients> getCartItemsWithDishesAndIngredients();
 
     @Transaction
-    public long[] insert(StorageOrderWithCartItems storageOrderWithCartItems) {
-        long id  = insert(storageOrderWithCartItems.storageOrder);
+    public long[] insert(StorageOrderWithOrderItems storageOrderWithOrderItems) {
+        long id  = insert(storageOrderWithOrderItems.storageOrder);
 
-        for (int i = 0; i < storageOrderWithCartItems.orderItems.size(); i++) {
-            storageOrderWithCartItems.orderItems.get(i).setOrderId(id);
+        for (int i = 0; i < storageOrderWithOrderItems.orderItems.size(); i++) {
+            storageOrderWithOrderItems.orderItems.get(i).setOrderId(id);
         }
 
-        return insert(storageOrderWithCartItems.orderItems);
+        return insert(storageOrderWithOrderItems.orderItems);
     }
 
     @Insert
@@ -73,5 +80,11 @@ public abstract class SmartGroceryShoppingDao {
 
     @Insert
     public abstract long[] insert(List<StorageOrderItem> storageOrderItems);
+
+    @Query("DELETE FROM Cart")
+    public abstract void deleteAllCartItems();
+
+    @Query("DELETE FROM Cart WHERE cartItemKey=:cartItemKey")
+    public abstract int deleteCartItem(int cartItemKey);
 
 }

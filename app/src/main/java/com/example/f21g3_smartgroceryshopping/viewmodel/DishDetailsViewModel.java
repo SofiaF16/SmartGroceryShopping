@@ -84,11 +84,11 @@ public class DishDetailsViewModel extends ViewModel {
         }
     }
 
-    public void addToCart(final int dishId, final int portionsNumber) {
+    public void addToCart(final int dishId, final String dishTitle, final int portionsNumber) {
         CompletableFuture.runAsync(() -> {
             addToCartResponse.postValue(new LoadingLoadResponse<>(ADD_TO_CART_LOADING));
 
-            long resultId = mainRepository.addToCart(new StorageCurrentCartItem(dishId, portionsNumber));
+            long resultId = mainRepository.addToCart(new StorageCurrentCartItem(dishId, dishTitle, portionsNumber));
 
             if(resultId == ADD_TO_CART_ERROR) {
                 addToCartResponse.postValue(new ErrorLoadResponse<>(resultId));

@@ -1,4 +1,4 @@
-package com.example.f21g3_smartgroceryshopping;
+package com.example.f21g3_smartgroceryshopping.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.f21g3_smartgroceryshopping.R;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 
 import java.util.List;

@@ -7,10 +7,13 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.f21g3_smartgroceryshopping.viewmodel.OrdersHistoryViewModel;
 
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class OrdersHistoryActivity extends AppCompatActivity {
 
     private OrdersHistoryViewModel ordersHistoryViewModel;
@@ -29,8 +32,13 @@ public class OrdersHistoryActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbarHistory);
         toolbar.setTitle(R.string.txtTitleHistory);
         toolbar.setNavigationIcon(R.drawable.ic_baseline);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_baseline);
 
 
     }

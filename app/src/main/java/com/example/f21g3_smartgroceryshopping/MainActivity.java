@@ -15,7 +15,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.f21g3_smartgroceryshopping.adapter.DishRecyclerViewAdapter;
+import com.example.f21g3_smartgroceryshopping.response.ErrorLoadResponse;
 import com.example.f21g3_smartgroceryshopping.response.LoadResponse;
+import com.example.f21g3_smartgroceryshopping.response.LoadingLoadResponse;
+import com.example.f21g3_smartgroceryshopping.response.SuccessLoadResponse;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 import com.example.f21g3_smartgroceryshopping.viewmodel.MainViewModel;
@@ -79,21 +82,31 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel.getDishesResponse().observe(this, new Observer<LoadResponse<List<Dish>>>() {
             @Override
             public void onChanged(LoadResponse<List<Dish>> dishLoadResponse) {
-                Log.d("myLogs", "dishLoadResponse");
-                if(dishLoadResponse.getResponse() != null) {
-                    List<Dish> dishes = dishLoadResponse.getResponse();
 
-                    Log.d("myLogs", String.valueOf(dishes.size()));
+                handleResponse(dishLoadResponse);
 
-                    if(dishes.size() != 0) {
-                        Log.d("myLogs", String.valueOf(dishes.get(0)));
-                    }
-
-                }
+//                Log.d("myLogs", "dishLoadResponse");
+//                if(dishLoadResponse.getResponse() != null) {
+//                    List<Dish> dishes = dishLoadResponse.getResponse();
+//
+//                    Log.d("myLogs", String.valueOf(dishes.size()));
+//
+//                    if(dishes.size() != 0) {
+//                        Log.d("myLogs", String.valueOf(dishes.get(0)));
+//                    }
+//
+//                }
             }
         });
 
-        mainViewModel.loadDishes();
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mainViewModel.loadDishes();
+            }
+        });
+
+
 
         mainViewModel.getCartSize().observe(this, new Observer<Integer>() {
             @Override
@@ -101,6 +114,36 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("myLogs", "getCartSize " + integer);
             }
         });
+
+    }
+
+    private void handleResponse(LoadResponse<List<Dish>> dishLoadResponse) {
+//        if(dishLoadResponse instanceof LoadingLoadResponse) {
+//
+//        } else {
+//            m(dishLoadResponse);
+//        }
+        if(dishLoadResponse instanceof LoadingLoadResponse) {
+            return;
+        }
+
+        if(dishLoadResponse instanceof SuccessLoadResponse) {
+            return;
+        }
+
+        if(dishLoadResponse instanceof ErrorLoadResponse) {
+            return;
+        }
+
+
+    }
+
+    private void m(LoadResponse<List<Dish>> dishLoadResponse) {
+        if(dishLoadResponse instanceof SuccessLoadResponse) {
+            dishRecyclerViewAdapter.addAll(dishLoadResponse.getResponse());
+        } else {
+            Toast.makeText(MainActivity.this, dishLoadResponse.getError().getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

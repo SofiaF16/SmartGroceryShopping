@@ -5,4 +5,12 @@
     <string name="imgViewDesc">Dish Image</string>
     <string name="fabCartDesc">View Cart</string>
     <string name="iconToolbarCartDesc">Meal Cart</string>
+    <string name="fabOrderText">Confirm order</string>
+    <string name="btnBackArrow">Go back button</string>
+    <string name="txtProcessing">Order is processing</string>
+    <string name="txtOrderedSuccessfully">Ordered Successfully</string>
+    <string name="btnTextBackToMain">Back to main</string>
+    <string name="txtTitleHistory">Orders History</string>
+
+
 </resources>

@@ -43,7 +43,7 @@ public class DishDetailsViewModel extends ViewModel {
     @Inject
     public DishDetailsViewModel(MainRepository mainRepository) {
         this.mainRepository = mainRepository;
-        cartItems = Transformations.map(this.mainRepository.getCartItems(), List::size);
+        cartItems = Transformations.map(this.mainRepository.getCartItemsLiveData(), List::size);
     }
 
     public LiveData<Integer> getCartSize() {

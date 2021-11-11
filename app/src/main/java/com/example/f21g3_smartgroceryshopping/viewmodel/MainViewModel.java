@@ -35,7 +35,7 @@ public class MainViewModel extends ViewModel {
     @Inject
     public MainViewModel(MainRepository mainRepository) {
         this.mainRepository = mainRepository;
-        cartItems = Transformations.map(this.mainRepository.getCartItems(), List::size);
+        cartItems = Transformations.map(this.mainRepository.getCartItemsLiveData(), List::size);
     }
 
     public LiveData<LoadResponse<List<Dish>>> getDishesResponse() {

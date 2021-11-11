@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "988596e84db853b59f96b2cfd7908022",
+    "identityHash": "3ab65ab4921e7af2c73b752d11e0d208",
     "entities": [
       {
         "tableName": "Dish",
@@ -94,7 +94,7 @@
       },
       {
         "tableName": "Ingredient",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER NOT NULL, `fk_dish` INTEGER NOT NULL, `title` TEXT, `quantity` INTEGER NOT NULL, `quantityUnit` TEXT, PRIMARY KEY(`uid`), FOREIGN KEY(`fk_dish`) REFERENCES `Dish`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER NOT NULL, `fk_dish` INTEGER NOT NULL, `title` TEXT, `quantity` REAL NOT NULL, `quantityUnit` TEXT, PRIMARY KEY(`uid`), FOREIGN KEY(`fk_dish`) REFERENCES `Dish`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "uid",
@@ -117,7 +117,7 @@
           {
             "fieldPath": "quantity",
             "columnName": "quantity",
-            "affinity": "INTEGER",
+            "affinity": "REAL",
             "notNull": true
           },
           {
@@ -159,7 +159,7 @@
       },
       {
         "tableName": "Order",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`orderId` INTEGER NOT NULL, `orderDate` INTEGER, PRIMARY KEY(`orderId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`orderId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `orderDate` INTEGER)",
         "fields": [
           {
             "fieldPath": "orderId",
@@ -178,7 +178,7 @@
           "columnNames": [
             "orderId"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
@@ -237,7 +237,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '988596e84db853b59f96b2cfd7908022')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3ab65ab4921e7af2c73b752d11e0d208')"
     ]
   }
 }

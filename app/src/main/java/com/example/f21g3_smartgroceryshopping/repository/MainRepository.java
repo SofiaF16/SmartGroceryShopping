@@ -73,7 +73,11 @@ public class MainRepository {
         return result;
     }
 
-    public LiveData<List<StorageCurrentCartItem>> getCartItems() {
+    public LiveData<List<StorageCurrentCartItem>> getCartItemsLiveData() {
+        return shoppingDao.getCartItemsLiveData();
+    }
+
+    public List<StorageCurrentCartItem> getCartItems() {
         return shoppingDao.getCartItems();
     }
 

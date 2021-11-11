@@ -46,6 +46,10 @@ public class OrdersHistoryViewModel extends ViewModel {
         return ordersResponse;
     }
 
+    public LiveData<LoadResponse<Long>> getUpdateCartResponse() {
+        return updateCartResponse;
+    }
+
     public void loadOrders() {
         CompletableFuture.runAsync(() -> {
             RepositoryResponse<List<StorageOrderWithOrderItems>> allOrders = mainRepository.getAllOrders();

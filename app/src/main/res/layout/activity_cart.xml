@@ -55,7 +55,7 @@
             app:layout_constraintVertical_bias="0.13" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabOrder"
+            android:id="@+id/fabCartOrder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"

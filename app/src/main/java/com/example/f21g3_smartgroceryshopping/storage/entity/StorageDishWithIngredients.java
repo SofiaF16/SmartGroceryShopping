@@ -12,7 +12,7 @@ public class StorageDishWithIngredients {
 
     @Relation(
             parentColumn = "uid",
-            entityColumn = "uid"
+            entityColumn = "fk_dish"
     )
     public final List<StorageIngredient> ingredients;
 

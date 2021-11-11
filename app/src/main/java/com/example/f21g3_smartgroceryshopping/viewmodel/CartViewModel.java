@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.f21g3_smartgroceryshopping.maker.FullIngredientsListMaker;
 import com.example.f21g3_smartgroceryshopping.repository.MainRepository;
 import com.example.f21g3_smartgroceryshopping.response.ErrorLoadResponse;
 import com.example.f21g3_smartgroceryshopping.response.LoadResponse;
@@ -43,12 +44,12 @@ public class CartViewModel extends ViewModel {
     private final MutableLiveData<LoadResponse<String>> postOrderStatusResponse = new MutableLiveData<>();
 
     private final MainRepository mainRepository;
-
-    // TODO add module to generate list of ingredients
+    private final FullIngredientsListMaker fullIngredientsListMaker;
 
     @Inject
-    public CartViewModel(MainRepository mainRepository) {
+    public CartViewModel(MainRepository mainRepository, FullIngredientsListMaker fullIngredientsListMaker) {
         this.mainRepository = mainRepository;
+        this.fullIngredientsListMaker = fullIngredientsListMaker;
     }
 
     public LiveData<LoadResponse<List<CartItem>>> getCartItemsResponse() {
@@ -91,18 +92,28 @@ public class CartViewModel extends ViewModel {
     }
 
     public void loadIngredientsList() {
-        // TODO implement logic
+        CompletableFuture.runAsync(() -> {
+            RepositoryResponse<List<StorageCurrentCartItemAndDishWithIngredients>> response = mainRepository.getCartItemsWithDishesAndIngredients();
+
+            if(response.getResponse() != null) {
+                List<StorageCurrentCartItemAndDishWithIngredients> cartItems = response.getResponse();
+                List<Ingredient> fullIngredientsList = fullIngredientsListMaker.makeFullIngredientList(cartItems);
+                fullIngredientsListResponse.postValue(new SuccessLoadResponse<>(fullIngredientsList));
+            }
+        });
     }
 
     public void postOrder() {
         CompletableFuture.runAsync(() -> {
             postOrderStatusResponse.postValue(new LoadingLoadResponse<>(""));
 
-            internetDelay();
+            //internetDelay();
 
-            List<StorageCurrentCartItem> currentCartItems = mainRepository.getCartItems().getValue();
+            List<StorageCurrentCartItem> currentCartItems = mainRepository.getCartItems();
             StorageOrderWithOrderItems storageOrderWithOrderItems = createStorageOrderWithCartItems(currentCartItems);
             long[] result = mainRepository.addToHistory(storageOrderWithOrderItems);
+
+            mainRepository.deleteAllCartItems();
 
             LoadResponse<String> response = prepareResponse(result);
             postOrderStatusResponse.postValue(response);

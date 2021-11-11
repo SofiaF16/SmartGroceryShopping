@@ -17,6 +17,7 @@ import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrder;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrderItem;
 import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrderWithOrderItems;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
@@ -41,7 +42,10 @@ public abstract class SmartGroceryShoppingDao {
     public abstract List<StorageDishWithIngredients> getAllDishesWithIngredients();
 
     @Query("SELECT * FROM Cart")
-    public abstract LiveData<List<StorageCurrentCartItem>> getCartItems();
+    public abstract LiveData<List<StorageCurrentCartItem>> getCartItemsLiveData();
+
+    @Query("SELECT * FROM Cart")
+    public abstract List<StorageCurrentCartItem> getCartItems();
 
     @Query("SELECT * FROM `Order`")
     @Transaction
@@ -66,20 +70,30 @@ public abstract class SmartGroceryShoppingDao {
 
     @Transaction
     public long[] insert(StorageOrderWithOrderItems storageOrderWithOrderItems) {
-        long id  = insert(storageOrderWithOrderItems.storageOrder);
+        long id = insert(storageOrderWithOrderItems.storageOrder);
 
         for (int i = 0; i < storageOrderWithOrderItems.orderItems.size(); i++) {
             storageOrderWithOrderItems.orderItems.get(i).setOrderId(id);
         }
 
-        return insert(storageOrderWithOrderItems.orderItems);
+        List<Long> list = new ArrayList<>();
+        for (int i = 0; i < storageOrderWithOrderItems.orderItems.size(); i++) {
+            long insertId = insert(storageOrderWithOrderItems.orderItems.get(i));
+            list.add(insertId);
+        }
+
+        long[] array = new long[list.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = list.get(i);
+        }
+
+        return array;
     }
 
     @Insert
     public abstract long insert(StorageOrder storageOrder);
-
     @Insert
-    public abstract long[] insert(List<StorageOrderItem> storageOrderItems);
+    public abstract long insert(StorageOrderItem storageOrderItems);
 
     @Query("DELETE FROM Cart")
     public abstract void deleteAllCartItems();

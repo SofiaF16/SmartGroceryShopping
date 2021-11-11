@@ -5,10 +5,10 @@ public class Ingredient {
 
     private int uid;
     private String title;
-    private int quantity;
+    private double quantity;
     private String quantityUnit;
 
-    public Ingredient(int uid, String title, int quantity, String quantityUnit) {
+    public Ingredient(int uid, String title, double quantity, String quantityUnit) {
         this.uid = uid;
         this.title = title;
         this.quantity = quantity;
@@ -23,7 +23,7 @@ public class Ingredient {
         return title;
     }
 
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 

@@ -22,12 +22,12 @@ public class StorageIngredient {
     public final String title;
 
     @ColumnInfo(name = "quantity")
-    public final int quantity;
+    public final double quantity;
 
     @ColumnInfo(name = "quantityUnit")
     public final String quantityUnit;
 
-    public StorageIngredient(int uid, int fk_dish, String title, int quantity, String quantityUnit) {
+    public StorageIngredient(int uid, int fk_dish, String title, double quantity, String quantityUnit) {
         this.uid = uid;
         this.fk_dish = fk_dish;
         this.title = title;

@@ -2,7 +2,6 @@ package com.example.f21g3_smartgroceryshopping.storage.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
@@ -10,7 +9,7 @@ import java.util.Date;
 @Entity(tableName = "Order")
 public class StorageOrder {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int orderId;
 
     @ColumnInfo(name = "orderDate")

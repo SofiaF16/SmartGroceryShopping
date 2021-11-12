@@ -39,7 +39,7 @@ public class MockSmartGroceryShoppingService implements SmartGroceryShoppingServ
         Dish firstDish = new Dish(1, "Borscht",
                 "Borscht is a sour soup common in Eastern Europe and Northern Asia.",
                 "Borscht derives from an ancient soup originally cooked from pickled stems, leaves and umbels of common hogweed (Heracleum sphondylium), a herbaceous plant growing in damp meadows, which lent the dish its Slavic name. With time, it evolved into a diverse array of tart soups, among which the Ukrainian beet-based red borscht has become the most popular. It is typically made by combining meat or bone stock with sautéed vegetables, which – as well as beetroots – usually include cabbage, carrots, onions, potatoes, and tomatoes. ",
-                "https://www.foodiecrush.com/wp-content/uploads/2019/05/Grilled-Salmon-foodiecrush.com-023.jpg",
+                "https://drive.google.com/uc?export=download&id=1VPFTVd4HJXZVidaVKtDjx6uJT7W24mmN",
                 false,
                 firstDishIngredients);
 
@@ -68,10 +68,9 @@ public class MockSmartGroceryShoppingService implements SmartGroceryShoppingServ
                 "Manty",
                 "Manti is a type of dumpling popular in most Turkic cuisines, as well as in the cuisines of the South Caucasus and Balkans",
                 "The dumplings typically consist of a spiced meat mixture, usually lamb or ground beef, in a thin dough wrapper and either boiled or steamed. Size and shape vary significantly depending on the geographical location.[1] Manti resemble the Chinese jiaozi and baozi, Korean mandu, Mongolian buuz and the Tibetan momo and the dish's name is cognate with the Korean mandu, Chinese mantou and Japanese manjū, although the modern Chinese and Japanese counterparts refer to different dishes",
-                "https://www.foodiecrush.com/wp-content/uploads/2019/05/Grilled-Salmon-foodiecrush.com-023.jpg",
+                "https://drive.google.com/uc?export=download&id=1rAZJy9iYfMAPFbqedMDPF0s4nOOPUPQU",
                 false,
                 secondDishIngredients);
-
 
         List<Dish> list = new ArrayList<>();
         list.add(firstDish);

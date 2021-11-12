@@ -73,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
 
         // mock data to test
         List<Ingredient> ingredients = new ArrayList<>(Arrays.asList());
-        DishList.add(new Dish(1,"Toasted Ravioli", "Breaded Deep-Fried Ravioli ", "Dish Desription", "https://www.foodiecrush.com/wp-content/uploads/2019/05/Grilled-Salmon-foodiecrush.com-023.jpg", false, ingredients));
-        DishList.add(new Dish(2,"Lamb Kofta", "Mediterranean Grilled Lamb", "Dish Desription", "https://www.foodiecrush.com/wp-content/uploads/2019/05/Grilled-Salmon-foodiecrush.com-023.jpg", false, ingredients));
+        DishList.add(new Dish(1,"Toasted Ravioli", "Breaded Deep-Fried Ravioli ", "Dish Desription", "https://drive.google.com/uc?export=download&id=1VPFTVd4HJXZVidaVKtDjx6uJT7W24mmN", false, ingredients));
+        DishList.add(new Dish(2,"Lamb Kofta", "Mediterranean Grilled Lamb", "Dish Desription", "https://drive.google.com/uc?export=download&id=1rAZJy9iYfMAPFbqedMDPF0s4nOOPUPQU", false, ingredients));
         DishList.add(new Dish(3,"Margarita", "Classic Vegetarian Pizza", "Dish Desription", "https://www.foodiecrush.com/wp-content/uploads/2019/05/Grilled-Salmon-foodiecrush.com-023.jpg", false, ingredients));
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);

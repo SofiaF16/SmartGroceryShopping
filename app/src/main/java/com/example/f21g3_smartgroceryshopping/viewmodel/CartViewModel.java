@@ -107,11 +107,11 @@ public class CartViewModel extends ViewModel {
         CompletableFuture.runAsync(() -> {
             postOrderStatusResponse.postValue(new LoadingLoadResponse<>(""));
 
-            //internetDelay();
+            internetDelay();
 
             List<StorageCurrentCartItem> currentCartItems = mainRepository.getCartItems();
             StorageOrderWithOrderItems storageOrderWithOrderItems = createStorageOrderWithCartItems(currentCartItems);
-            long[] result = mainRepository.addToHistory(storageOrderWithOrderItems);
+            List<Long> result = mainRepository.addToHistory(storageOrderWithOrderItems);
 
             mainRepository.deleteAllCartItems();
 
@@ -147,8 +147,8 @@ public class CartViewModel extends ViewModel {
         return new StorageOrderItem(storageCurrentCartItem.dishId, storageCurrentCartItem.dishTitle, storageCurrentCartItem.portions);
     }
 
-    private LoadResponse<String> prepareResponse(long[] result) {
-        if(result.length != 0) {
+    private LoadResponse<String> prepareResponse(List<Long> result) {
+        if(result.size() != 0) {
             return new SuccessLoadResponse<>("");
         }
 

@@ -36,6 +36,8 @@ public class MainViewModel extends ViewModel {
     public MainViewModel(MainRepository mainRepository) {
         this.mainRepository = mainRepository;
         cartItems = Transformations.map(this.mainRepository.getCartItemsLiveData(), List::size);
+
+        loadDishes();
     }
 
     public LiveData<LoadResponse<List<Dish>>> getDishesResponse() {

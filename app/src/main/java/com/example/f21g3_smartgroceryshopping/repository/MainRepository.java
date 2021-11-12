@@ -109,7 +109,7 @@ public class MainRepository {
         }
     }
 
-    public long[] addToHistory(StorageOrderWithOrderItems storageOrder) {
+    public List<Long> addToHistory(StorageOrderWithOrderItems storageOrder) {
         return shoppingDao.insert(storageOrder);
     }
 

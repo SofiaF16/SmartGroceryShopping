@@ -11,7 +11,7 @@ public class StorageOrderWithOrderItems {
 
     @Relation(
             parentColumn = "orderId",
-            entityColumn = "orderId"
+            entityColumn = "fk_order"
     )
     public final List<StorageOrderItem> orderItems;
 

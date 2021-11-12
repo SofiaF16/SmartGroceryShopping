@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "3ab65ab4921e7af2c73b752d11e0d208",
+    "identityHash": "50036c02eaa614fe10aa1577bcb73f82",
     "entities": [
       {
         "tableName": "Dish",
@@ -185,11 +185,17 @@
       },
       {
         "tableName": "OrderItem",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`orderId` INTEGER NOT NULL, `dishId` INTEGER NOT NULL, `dishTitle` TEXT, `portions` INTEGER NOT NULL, PRIMARY KEY(`orderId`), FOREIGN KEY(`orderId`) REFERENCES `Order`(`orderId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`orderItemId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `fk_order` INTEGER NOT NULL, `dishId` INTEGER NOT NULL, `dishTitle` TEXT, `portions` INTEGER NOT NULL, FOREIGN KEY(`fk_order`) REFERENCES `Order`(`orderId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
-            "fieldPath": "orderId",
-            "columnName": "orderId",
+            "fieldPath": "orderItemId",
+            "columnName": "orderItemId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fk_order",
+            "columnName": "fk_order",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -214,18 +220,27 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "orderId"
+            "orderItemId"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_OrderItem_fk_order",
+            "unique": false,
+            "columnNames": [
+              "fk_order"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_OrderItem_fk_order` ON `${TABLE_NAME}` (`fk_order`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "Order",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "orderId"
+              "fk_order"
             ],
             "referencedColumns": [
               "orderId"
@@ -237,7 +252,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3ab65ab4921e7af2c73b752d11e0d208')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '50036c02eaa614fe10aa1577bcb73f82')"
     ]
   }
 }

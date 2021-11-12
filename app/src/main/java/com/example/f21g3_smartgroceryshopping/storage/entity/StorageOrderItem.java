@@ -7,13 +7,16 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "OrderItem", foreignKeys = {@ForeignKey(entity = StorageOrder.class,
         parentColumns = "orderId",
-        childColumns = "orderId",
+        childColumns = "fk_order",
         onDelete = ForeignKey.CASCADE)
 })
 public class StorageOrderItem {
 
-    @PrimaryKey
-    public long orderId;
+    @PrimaryKey(autoGenerate = true)
+    public long orderItemId;
+
+    @ColumnInfo(name = "fk_order", index = true)
+    public long fk_order;
 
     @ColumnInfo(name = "dishId")
     public final long dishId;
@@ -30,8 +33,7 @@ public class StorageOrderItem {
         this.portions = portions;
     }
 
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
+    public void setFk_order(long fk_order) {
+        this.fk_order = fk_order;
     }
-
 }

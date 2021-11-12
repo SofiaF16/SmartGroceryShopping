@@ -69,25 +69,21 @@ public abstract class SmartGroceryShoppingDao {
     public abstract List<StorageCurrentCartItemAndDishWithIngredients> getCartItemsWithDishesAndIngredients();
 
     @Transaction
-    public long[] insert(StorageOrderWithOrderItems storageOrderWithOrderItems) {
-        long id = insert(storageOrderWithOrderItems.storageOrder);
-
-        for (int i = 0; i < storageOrderWithOrderItems.orderItems.size(); i++) {
-            storageOrderWithOrderItems.orderItems.get(i).setOrderId(id);
-        }
-
+    public List<Long> insert(StorageOrderWithOrderItems storageOrderWithOrderItems) {
         List<Long> list = new ArrayList<>();
-        for (int i = 0; i < storageOrderWithOrderItems.orderItems.size(); i++) {
-            long insertId = insert(storageOrderWithOrderItems.orderItems.get(i));
-            list.add(insertId);
+
+        long orderId = insert(storageOrderWithOrderItems.storageOrder);
+
+        if(orderId <= 0) {
+            return list;
         }
 
-        long[] array = new long[list.size()];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = list.get(i);
+        for (StorageOrderItem orderItem : storageOrderWithOrderItems.orderItems) {
+            orderItem.setFk_order(orderId);
+            list.add(insert(orderItem));
         }
 
-        return array;
+        return list;
     }
 
     @Insert

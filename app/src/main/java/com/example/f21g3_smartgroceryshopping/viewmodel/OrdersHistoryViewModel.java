@@ -90,7 +90,7 @@ public class OrdersHistoryViewModel extends ViewModel {
     }
 
     private OrderItem toOrderItem(StorageOrderItem storageOrderItem) {
-        return new OrderItem(storageOrderItem.orderId, storageOrderItem.dishTitle, storageOrderItem.portions);
+        return new OrderItem(storageOrderItem.fk_order, storageOrderItem.dishTitle, storageOrderItem.portions);
     }
 
     public void updateCartWith(final Order order) {

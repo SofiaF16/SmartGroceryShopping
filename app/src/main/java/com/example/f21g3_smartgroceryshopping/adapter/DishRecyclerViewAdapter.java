@@ -34,11 +34,13 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
     public void onBindViewHolder(@NonNull DishViewHolder dishViewHolder, int position) {
         dishViewHolder.dishName.setText(DishList.get(position).getTitle());
         dishViewHolder.dishDesc.setText(DishList.get(position).getShortDescription());
+        String imageUrl = DishList.get(position).getImageUrl();
+
         Glide.with(dishViewHolder.dishPic.getContext())
-                .load(DishList.get(position).getImageUrl())
+                .load(imageUrl)
                 .override(dishViewHolder.dishPic.getWidth(), dishViewHolder.dishPic.getHeight())
-                .error(R.drawable.salmon)
-                .placeholder(R.drawable.salmon)
+                .error(R.drawable.error_loand_image)
+                .placeholder(R.drawable.error_loand_image)
                 .into(dishViewHolder.dishPic);
     }
 
@@ -68,6 +70,7 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
     }
 
     public void addAll(List<Dish> list) {
+        DishList.clear();
         DishList.addAll(list);
         notifyDataSetChanged();
     }

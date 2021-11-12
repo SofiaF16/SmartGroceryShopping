@@ -7,7 +7,7 @@
     tools:context=".DishDetailsActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarOrder"
+        android:id="@+id/toolbarDishDetails"
         android:minHeight="?attr/actionBarSize"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,38 +20,97 @@
         app:titleMarginStart="40dp"/>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardViewOrder"
+        android:id="@+id/cardViewDish"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarOrder">
+        app:layout_constraintTop_toBottomOf="@+id/toolbarDishDetails">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewOrder"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="16dp" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:id="@+id/imageViewDishDetails"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_centerHorizontal="true"
+                android:contentDescription="@string/imgViewDesc"
+                app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+            <TextView
+                android:id="@+id/textViewDetailsDishName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageViewDishDetails"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/txtDishName"
+                android:textColor="#000"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/textViewDetailsDishDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewDetailsDishName"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/txtDishDesc"
+                android:textColor="#000"
+                android:textSize="14sp" />
+
+            <NumberPicker
+                android:id="@+id/numberOfMealsPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewDetailsDishDesc"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textViewPortions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewDetailsDishDesc"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_toEndOf="@+id/numberOfMealsPicker"
+                android:text="@string/textNumberOfPortions"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
     </androidx.cardview.widget.CardView>
-    
-    
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabDish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:contentDescription="@string/fabOrderText"
-        android:focusable="true"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/fabAddToCart"
+        android:src="@drawable/icon_add_to_cart"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+        <!--android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"-->
+
+        <!--app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="40dp"
-        app:srcCompat="@drawable/checkout" />
+        app:srcCompat="@drawable/checkout"-->
 </androidx.constraintlayout.widget.ConstraintLayout>

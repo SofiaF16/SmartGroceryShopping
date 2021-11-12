@@ -72,32 +72,12 @@ public class MainActivity extends AppCompatActivity {
         fabBasket.setOnClickListener((View view) -> Toast.makeText(MainActivity.this, "FAB clicked", Toast.LENGTH_SHORT).show());
 
         // mock data to test
-        List<Ingredient> ingredients = new ArrayList<>(Arrays.asList());
+        /*List<Ingredient> ingredients = new ArrayList<>(Arrays.asList());
         DishList.add(new Dish(1,"Toasted Ravioli", "Breaded Deep-Fried Ravioli ", "Dish Desription", "https://drive.google.com/uc?export=download&id=1VPFTVd4HJXZVidaVKtDjx6uJT7W24mmN", false, ingredients));
         DishList.add(new Dish(2,"Lamb Kofta", "Mediterranean Grilled Lamb", "Dish Desription", "https://drive.google.com/uc?export=download&id=1rAZJy9iYfMAPFbqedMDPF0s4nOOPUPQU", false, ingredients));
         DishList.add(new Dish(3,"Margarita", "Classic Vegetarian Pizza", "Dish Desription", "https://www.foodiecrush.com/wp-content/uploads/2019/05/Grilled-Salmon-foodiecrush.com-023.jpg", false, ingredients));
-
+*/
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-
-        mainViewModel.getDishesResponse().observe(this, new Observer<LoadResponse<List<Dish>>>() {
-            @Override
-            public void onChanged(LoadResponse<List<Dish>> dishLoadResponse) {
-
-                handleResponse(dishLoadResponse);
-
-//                Log.d("myLogs", "dishLoadResponse");
-//                if(dishLoadResponse.getResponse() != null) {
-//                    List<Dish> dishes = dishLoadResponse.getResponse();
-//
-//                    Log.d("myLogs", String.valueOf(dishes.size()));
-//
-//                    if(dishes.size() != 0) {
-//                        Log.d("myLogs", String.valueOf(dishes.get(0)));
-//                    }
-//
-//                }
-            }
-        });
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -106,36 +86,49 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        subscribeOnGetCartSizeResponse();
+        subscribeOnDishesResponse();
+    }
 
-
+    private void subscribeOnGetCartSizeResponse() {
         mainViewModel.getCartSize().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 Log.d("myLogs", "getCartSize " + integer);
             }
         });
+    }
 
+    private void subscribeOnDishesResponse() {
+        mainViewModel.getDishesResponse().observe(this, new Observer<LoadResponse<List<Dish>>>() {
+            @Override
+            public void onChanged(LoadResponse<List<Dish>> dishLoadResponse) {
+                handleResponse(dishLoadResponse);
+            }
+        });
     }
 
     private void handleResponse(LoadResponse<List<Dish>> dishLoadResponse) {
-//        if(dishLoadResponse instanceof LoadingLoadResponse) {
-//
-//        } else {
-//            m(dishLoadResponse);
-//        }
         if(dishLoadResponse instanceof LoadingLoadResponse) {
+            swipeContainer.setRefreshing(true);
             return;
         }
 
         if(dishLoadResponse instanceof SuccessLoadResponse) {
+            swipeContainer.setRefreshing(false);
+            if(dishLoadResponse.getResponse() != null) {
+                List<Dish> dishes = dishLoadResponse.getResponse();
+                dishRecyclerViewAdapter.addAll(dishes);
+            }
             return;
         }
 
         if(dishLoadResponse instanceof ErrorLoadResponse) {
+            swipeContainer.setRefreshing(false);
+
+            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
             return;
         }
-
-
     }
 
     private void m(LoadResponse<List<Dish>> dishLoadResponse) {

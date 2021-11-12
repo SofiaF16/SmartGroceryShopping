@@ -32,10 +32,10 @@ public class DishDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dish_details);
         dishId = getIntent().getIntExtra(DISH_ID, dishId);
 
-        fabOrder = findViewById(R.id.fabOrder);
+        fabOrder = findViewById(R.id.fabDish);
         toolbar = findViewById(R.id.toolbarOrder);
         toolbar.setTitle(R.string.app_name);
-        toolbar.setNavigationIcon(R.drawable.ic_baseline);
+        toolbar.setNavigationIcon(R.drawable.back_arrow);
         setSupportActionBar(toolbar);
 
 

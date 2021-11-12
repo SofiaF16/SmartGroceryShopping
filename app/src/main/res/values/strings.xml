@@ -11,6 +11,13 @@
     <string name="txtOrderedSuccessfully">Ordered Successfully</string>
     <string name="btnTextBackToMain">Back to main</string>
     <string name="txtTitleHistory">Orders History</string>
+    <string name="txtIngredientsTitle">Ingredients</string>
+    <string name="txtDishesTitle">Your Dishes</string>
+    <string name="imgSmileDescription">Smiley face</string>
+    <string name="editTextDescription">Number of dishes</string>
+    <string name="btnUpdateText">Update</string>
+    <string name="imgViewCancelTextDesc">Cancel</string>
+    <string name="txtOrdersHistory">Orders History</string>
 
 
 </resources>

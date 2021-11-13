@@ -11,6 +11,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -35,6 +37,8 @@ public class DishDetailsActivity extends AppCompatActivity {
     private static final String DISH_ID = "DishDetailsActivityDishId";
 
     private int dishId;
+    private Dish dish;
+    private int numberOfPortions;
     private ConstraintLayout dishDetailsLayout;
     private Toolbar toolbarDishDetails;
     private FloatingActionButton fabAddDish;
@@ -42,7 +46,7 @@ public class DishDetailsActivity extends AppCompatActivity {
     private ImageView dishImage;
     private TextView dishName;
     private TextView dishDesc;
-    private NumberPicker numberOfPortions;
+    private NumberPicker numberOfPortionsPicker;
     private DishDetailsViewModel dishDetailsViewModel;
 
     @Override
@@ -54,21 +58,37 @@ public class DishDetailsActivity extends AppCompatActivity {
         fabAddDish = findViewById(R.id.fabDish);
 
         toolbarDishDetails = findViewById(R.id.toolbarDishDetails);
-        //toolbarDishDetails.setTitle(R.string.app_name);
         toolbarDishDetails.setNavigationIcon(R.drawable.back_arrow);
         setSupportActionBar(toolbarDishDetails);
+        toolbarDishDetails.setNavigationOnClickListener((View view) -> {
+            finish();
+        });
 
         cardViewDish = findViewById(R.id.cardViewDish);
         dishImage = findViewById(R.id.imageViewDishDetails);
         dishName = findViewById(R.id.textViewDetailsDishName);
         dishDesc = findViewById(R.id.textViewDetailsDishDesc);
-        numberOfPortions = findViewById(R.id.numberOfMealsPicker);
-        numberOfPortions.setMinValue(0);
-        numberOfPortions.setMaxValue(20);
+        numberOfPortionsPicker = findViewById(R.id.numberOfMealsPicker);
+        numberOfPortionsPicker.setMinValue(1);
+        numberOfPortionsPicker.setMaxValue(20);
+        numberOfPortionsPicker.setWrapSelectorWheel(false);
+        numberOfPortionsPicker.setClickable(false);
 
+        numberOfPortionsPicker.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> {
+            numberOfPortionsPicker.setValue(newVal);
+            numberOfPortions = newVal;
+            Toast.makeText(DishDetailsActivity.this, "Selected number of portions: " + newVal, Toast.LENGTH_SHORT).show();
+        });
+
+        fabAddDish.setOnClickListener((View view) -> {
+            if (dish != null) {
+                dishDetailsViewModel.addToCart(dish.getUid(), dish.getTitle(), 5);
+            }
+        });
 
         dishDetailsViewModel = new ViewModelProvider(this).get(DishDetailsViewModel.class);
         subscribeOnDishLoadResponse();
+        subscribeOnAddDishResponse();
 
         if (savedInstanceState == null) {
             dishDetailsViewModel.loadDish(dishId);
@@ -82,14 +102,16 @@ public class DishDetailsActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
-    private void subscribeOnDishLoadResponse() {
-
-        /*dishDetailsViewModel.addToCartResponse().observe(this, new Observer<LoadResponse<Long>>() {
+    private void subscribeOnAddDishResponse() {
+        dishDetailsViewModel.addToCartResponse().observe(this, new Observer<LoadResponse<Long>>() {
             @Override
             public void onChanged(LoadResponse<Long> longLoadResponse) {
-                handleAdd
+                handleAddDishResponse(longLoadResponse);
             }
-        });*/
+        });
+    }
+
+    private void subscribeOnDishLoadResponse() {
 
         dishDetailsViewModel.getDish().observe(this, new Observer<LoadResponse<Dish>>() {
             @Override
@@ -107,6 +129,7 @@ public class DishDetailsActivity extends AppCompatActivity {
         if(dishResponse instanceof SuccessLoadResponse) {
             if(dishResponse.getResponse() != null) {
                 Dish response = dishResponse.getResponse();
+                dish = response;
                 dishName.setText(response.getTitle());
                 dishDesc.setText(response.getLongDescription());
 
@@ -127,4 +150,20 @@ public class DishDetailsActivity extends AppCompatActivity {
         }
     }
 
+    private void handleAddDishResponse(LoadResponse<Long> dishResponse) {
+        if(dishResponse instanceof LoadingLoadResponse) {
+            return;
+        }
+
+        if(dishResponse instanceof SuccessLoadResponse) {
+            finish();
+            Toast.makeText(DishDetailsActivity.this, "Dish added successfully", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(dishResponse instanceof ErrorLoadResponse) {
+            Toast.makeText(DishDetailsActivity.this, "Error", Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
 }

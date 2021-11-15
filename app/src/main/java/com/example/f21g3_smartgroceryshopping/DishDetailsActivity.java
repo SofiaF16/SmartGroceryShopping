@@ -2,15 +2,32 @@ package com.example.f21g3_smartgroceryshopping;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.NumberPicker;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.f21g3_smartgroceryshopping.response.ErrorLoadResponse;
+import com.example.f21g3_smartgroceryshopping.response.LoadResponse;
+import com.example.f21g3_smartgroceryshopping.response.LoadingLoadResponse;
+import com.example.f21g3_smartgroceryshopping.response.SuccessLoadResponse;
+import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.viewmodel.DishDetailsViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -20,10 +37,16 @@ public class DishDetailsActivity extends AppCompatActivity {
     private static final String DISH_ID = "DishDetailsActivityDishId";
 
     private int dishId;
-    FloatingActionButton fabOrder;
-    ProgressDialog progressDialog;
-    Toolbar toolbar;
-
+    private Dish dish;
+    private int numberOfPortions;
+    private ConstraintLayout dishDetailsLayout;
+    private Toolbar toolbarDishDetails;
+    private FloatingActionButton fabAddDish;
+    private CardView cardViewDish;
+    private ImageView dishImage;
+    private TextView dishName;
+    private TextView dishDesc;
+    private NumberPicker numberOfPortionsPicker;
     private DishDetailsViewModel dishDetailsViewModel;
 
     @Override
@@ -32,14 +55,45 @@ public class DishDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dish_details);
         dishId = getIntent().getIntExtra(DISH_ID, dishId);
 
-        fabOrder = findViewById(R.id.fabDish);
-        toolbar = findViewById(R.id.toolbarOrder);
-        toolbar.setTitle(R.string.app_name);
-        toolbar.setNavigationIcon(R.drawable.back_arrow);
-        setSupportActionBar(toolbar);
+        fabAddDish = findViewById(R.id.fabDish);
 
+        toolbarDishDetails = findViewById(R.id.toolbarDishDetails);
+        toolbarDishDetails.setNavigationIcon(R.drawable.back_arrow);
+        setSupportActionBar(toolbarDishDetails);
+        toolbarDishDetails.setNavigationOnClickListener((View view) -> {
+            finish();
+        });
+
+        cardViewDish = findViewById(R.id.cardViewDish);
+        dishImage = findViewById(R.id.imageViewDishDetails);
+        dishName = findViewById(R.id.textViewDetailsDishName);
+        dishDesc = findViewById(R.id.textViewDetailsDishDesc);
+        numberOfPortionsPicker = findViewById(R.id.numberOfMealsPicker);
+        numberOfPortionsPicker.setMinValue(1);
+        numberOfPortionsPicker.setMaxValue(20);
+        numberOfPortionsPicker.setWrapSelectorWheel(false);
+        numberOfPortionsPicker.setClickable(false);
+
+        numberOfPortionsPicker.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> {
+            numberOfPortionsPicker.setValue(newVal);
+            numberOfPortions = newVal;
+            Toast.makeText(DishDetailsActivity.this, "Selected number of portions: " + newVal, Toast.LENGTH_SHORT).show();
+        });
+
+        fabAddDish.setOnClickListener((View view) -> {
+            if (dish != null) {
+                dishDetailsViewModel.addToCart(dish.getUid(), dish.getTitle(), 5);
+            }
+        });
 
         dishDetailsViewModel = new ViewModelProvider(this).get(DishDetailsViewModel.class);
+        subscribeOnDishLoadResponse();
+        subscribeOnAddDishResponse();
+
+        if (savedInstanceState == null) {
+            dishDetailsViewModel.loadDish(dishId);
+        }
+
     }
 
     public static void launch(Context context, int dishId) {
@@ -48,9 +102,68 @@ public class DishDetailsActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
+    private void subscribeOnAddDishResponse() {
+        dishDetailsViewModel.addToCartResponse().observe(this, new Observer<LoadResponse<Long>>() {
+            @Override
+            public void onChanged(LoadResponse<Long> longLoadResponse) {
+                handleAddDishResponse(longLoadResponse);
+            }
+        });
+    }
 
+    private void subscribeOnDishLoadResponse() {
 
+        dishDetailsViewModel.getDish().observe(this, new Observer<LoadResponse<Dish>>() {
+            @Override
+            public void onChanged(LoadResponse<Dish> dishLoadResponse) {
+                handleResponse(dishLoadResponse);
+            }
+        });
+    }
 
+    private void handleResponse(LoadResponse<Dish> dishResponse) {
+        if(dishResponse instanceof LoadingLoadResponse) {
+            return;
+        }
 
+        if(dishResponse instanceof SuccessLoadResponse) {
+            if(dishResponse.getResponse() != null) {
+                Dish response = dishResponse.getResponse();
+                dish = response;
+                dishName.setText(response.getTitle());
+                dishDesc.setText(response.getLongDescription());
 
+                Glide.with(dishImage.getContext())
+                        .load(response.getImageUrl())
+                        .override(dishImage.getWidth(), dishImage.getHeight())
+                        .error(R.drawable.error_loand_image)
+                        .placeholder(R.drawable.error_loand_image)
+                        .into(dishImage);
+            }
+            return;
+        }
+
+        if(dishResponse instanceof ErrorLoadResponse) {
+
+            Toast.makeText(DishDetailsActivity.this, "Error", Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
+    private void handleAddDishResponse(LoadResponse<Long> dishResponse) {
+        if(dishResponse instanceof LoadingLoadResponse) {
+            return;
+        }
+
+        if(dishResponse instanceof SuccessLoadResponse) {
+            finish();
+            Toast.makeText(DishDetailsActivity.this, "Dish added successfully", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(dishResponse instanceof ErrorLoadResponse) {
+            Toast.makeText(DishDetailsActivity.this, "Error", Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
 }

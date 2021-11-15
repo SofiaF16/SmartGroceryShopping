@@ -11,16 +11,21 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.f21g3_smartgroceryshopping.DishDetailsActivity;
 import com.example.f21g3_smartgroceryshopping.R;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerViewAdapter.DishViewHolder> {
     private List<Dish> DishList;
 
-    public DishRecyclerViewAdapter(List<Dish> dishList) {
-       DishList = dishList;
+    private OnDishClickListener onDishClickListener;
+
+    public DishRecyclerViewAdapter(OnDishClickListener onDishClickListener) {
+       this.onDishClickListener = onDishClickListener;
+       DishList = new ArrayList<>();
     }
 
     @NonNull
@@ -42,6 +47,12 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
                 .error(R.drawable.error_loand_image)
                 .placeholder(R.drawable.error_loand_image)
                 .into(dishViewHolder.dishPic);
+
+
+        /*dishViewHolder.itemView.setOnClickListener((View view) -> {
+        // open another activity on item click
+            DishDetailsActivity.launch(dishViewHolder.dishPic.getContext(), position);
+        });*/
     }
 
     @Override
@@ -49,11 +60,11 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
         return DishList.size();
     }
 
-    public class DishViewHolder extends RecyclerView.ViewHolder {
-        CardView cardViewMeal;
-        TextView dishName;
-        TextView dishDesc;
-        ImageView dishPic;
+    protected class DishViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private CardView cardViewMeal;
+        private TextView dishName;
+        private TextView dishDesc;
+        private ImageView dishPic;
 
         public DishViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -61,6 +72,12 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
             dishName = itemView.findViewById(R.id.textViewDishName);
             dishDesc = itemView.findViewById(R.id.textViewDishDesc);
             dishPic = itemView.findViewById(R.id.imageViewDish);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            onDishClickListener.onDishClick(DishList.get(getBindingAdapterPosition()));
         }
     }
 
@@ -73,6 +90,10 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
         DishList.clear();
         DishList.addAll(list);
         notifyDataSetChanged();
+    }
+
+    public interface OnDishClickListener{
+        void onDishClick(Dish dish);
     }
 
 }

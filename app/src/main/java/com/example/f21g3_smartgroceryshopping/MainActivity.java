@@ -63,7 +63,12 @@ public class MainActivity extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerViewMeals.setLayoutManager(linearLayoutManager);
 
-        dishRecyclerViewAdapter = new DishRecyclerViewAdapter(DishList);
+        dishRecyclerViewAdapter = new DishRecyclerViewAdapter(new DishRecyclerViewAdapter.OnDishClickListener() {
+            @Override
+            public void onDishClick(Dish dish) {
+                DishDetailsActivity.launch(MainActivity.this, dish.getUid());
+            }
+        });
         recyclerViewMeals.setAdapter(dishRecyclerViewAdapter);
 
         //Showing toast for test only

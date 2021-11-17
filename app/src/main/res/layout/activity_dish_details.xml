@@ -17,7 +17,15 @@ tools:context=".DishDetailsActivity">
     android:background="#006C5F"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:title="Smart Grocery Shopping"
-    app:titleMarginStart="40dp"/>
+    app:titleMarginStart="40dp">
+
+    <TextView
+        android:id="@+id/textViewCartSizeDishDetails"
+        android:layout_gravity="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</androidx.appcompat.widget.Toolbar>
 
 <androidx.cardview.widget.CardView
     android:id="@+id/cardViewDish"
@@ -117,71 +125,6 @@ tools:context=".DishDetailsActivity">
             app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--        <RelativeLayout-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_gravity="center"-->
-    <!--            android:visibility="gone">-->
-
-    <!--            <ImageView-->
-    <!--                android:id="@+id/imageViewDishDetails"-->
-    <!--                android:layout_width="250dp"-->
-    <!--                android:layout_height="250dp"-->
-    <!--                android:layout_centerHorizontal="true"-->
-    <!--                android:contentDescription="@string/imgViewDesc"-->
-    <!--                app:srcCompat="@android:drawable/ic_menu_gallery" />-->
-
-    <!--            <TextView-->
-    <!--                android:id="@+id/textViewDetailsDishName"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_below="@+id/imageViewDishDetails"-->
-    <!--                android:layout_marginStart="32dp"-->
-    <!--                android:layout_marginTop="8dp"-->
-    <!--                android:text="@string/txtDishName"-->
-    <!--                android:textColor="#000"-->
-    <!--                android:textSize="24sp" />-->
-
-    <!--            <TextView-->
-    <!--                android:id="@+id/textViewDetailsDishDesc"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_below="@+id/textViewDetailsDishName"-->
-    <!--                android:layout_marginStart="32dp"-->
-    <!--                android:layout_marginTop="8dp"-->
-    <!--                android:layout_marginEnd="32dp"-->
-    <!--                android:layout_marginBottom="16dp"-->
-    <!--                android:text="@string/txtDishDesc"-->
-    <!--                android:textColor="#000"-->
-    <!--                android:textSize="14sp" />-->
-
-    <!--            <NumberPicker-->
-    <!--                android:id="@+id/numberOfMealsPicker"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="wrap_content"-->
-    <!--                android:layout_below="@+id/textViewDetailsDishDesc"-->
-    <!--                android:layout_alignParentStart="true"-->
-    <!--                android:layout_marginStart="32dp"-->
-    <!--                android:layout_marginTop="8dp" />-->
-
-    <!--            <TextView-->
-    <!--                android:id="@+id/textViewPortions"-->
-    <!--                android:layout_width="wrap_content"-->
-    <!--                android:layout_height="match_parent"-->
-    <!--                android:layout_below="@+id/textViewDetailsDishDesc"-->
-    <!--                android:layout_alignParentEnd="true"-->
-    <!--                android:layout_alignParentBottom="true"-->
-    <!--                android:layout_margin
-    04:15 PM
-    Start="34dp"-->
-    <!--                android:layout_marginEnd="30dp"-->
-    <!--                android:layout_marginBottom="82dp"-->
-    <!--                android:layout_toEndOf="@+id/numberOfMealsPicker"-->
-    <!--                android:text="@string/textNumberOfPortions"-->
-    <!--                android:textSize="16sp" />-->
-
-    <!--        </RelativeLayout>-->
-
 </androidx.cardview.widget.CardView>
 
 <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -194,12 +137,5 @@ tools:context=".DishDetailsActivity">
     android:src="@drawable/icon_add_to_cart"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent" />
-<!--android:layout_marginEnd="16dp"
-android:layout_marginBottom="16dp"
-android:clickable="true"-->
 
-<!--app:layout_constraintBottom_toBottomOf="parent"
-app:layout_constraintEnd_toEndOf="parent"
-app:maxImageSize="40dp"
-app:srcCompat="@drawable/checkout"-->
 </androidx.constraintlayout.widget.ConstraintLayout>

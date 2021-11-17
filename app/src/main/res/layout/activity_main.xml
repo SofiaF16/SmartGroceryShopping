@@ -15,7 +15,15 @@
         android:background="#006C5F"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:title="Smart Grocery Shopping"
-        app:titleMarginStart="40dp" />
+        app:titleMarginStart="40dp">
+
+        <TextView
+            android:id="@+id/textViewCartSizeMain"
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"

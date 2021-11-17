@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.f21g3_smartgroceryshopping.adapter.DishRecyclerViewAdapter;
@@ -20,12 +20,10 @@ import com.example.f21g3_smartgroceryshopping.response.LoadResponse;
 import com.example.f21g3_smartgroceryshopping.response.LoadingLoadResponse;
 import com.example.f21g3_smartgroceryshopping.response.SuccessLoadResponse;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
-import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 import com.example.f21g3_smartgroceryshopping.viewmodel.MainViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -33,6 +31,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
+    private TextView cartSizeTextView;
     private Toolbar toolbarMain;
     private SwipeRefreshLayout swipeContainer;
     private RecyclerView recyclerViewMeals;
@@ -49,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
         toolbarMain = findViewById(R.id.toolbarMain);
         setSupportActionBar(toolbarMain);
+
+        cartSizeTextView = findViewById(R.id.textViewCartSizeMain);
 
         swipeContainer = findViewById(R.id.swipeContainer);
 
@@ -76,12 +77,6 @@ public class MainActivity extends AppCompatActivity {
         fabBasket = findViewById(R.id.fabBasket);
         fabBasket.setOnClickListener((View view) -> Toast.makeText(MainActivity.this, "FAB clicked", Toast.LENGTH_SHORT).show());
 
-        // mock data to test
-        /*List<Ingredient> ingredients = new ArrayList<>(Arrays.asList());
-        DishList.add(new Dish(1,"Toasted Ravioli", "Breaded Deep-Fried Ravioli ", "Dish Desription", "https://drive.google.com/uc?export=download&id=1VPFTVd4HJXZVidaVKtDjx6uJT7W24mmN", false, ingredients));
-        DishList.add(new Dish(2,"Lamb Kofta", "Mediterranean Grilled Lamb", "Dish Desription", "https://drive.google.com/uc?export=download&id=1rAZJy9iYfMAPFbqedMDPF0s4nOOPUPQU", false, ingredients));
-        DishList.add(new Dish(3,"Margarita", "Classic Vegetarian Pizza", "Dish Desription", "https://www.foodiecrush.com/wp-content/uploads/2019/05/Grilled-Salmon-foodiecrush.com-023.jpg", false, ingredients));
-*/
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -98,8 +93,12 @@ public class MainActivity extends AppCompatActivity {
     private void subscribeOnGetCartSizeResponse() {
         mainViewModel.getCartSize().observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(Integer integer) {
-                Log.d("myLogs", "getCartSize " + integer);
+            public void onChanged(Integer cartSize) {
+                if(cartSize == 0) {
+                    cartSizeTextView.setText(R.string.empty_cart);
+                } else {
+                    cartSizeTextView.setText(String.valueOf(cartSize));
+                }
             }
         });
     }
@@ -131,16 +130,8 @@ public class MainActivity extends AppCompatActivity {
         if(dishLoadResponse instanceof ErrorLoadResponse) {
             swipeContainer.setRefreshing(false);
 
-            Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, getString(R.string.error_dish_load), Toast.LENGTH_SHORT).show();
             return;
-        }
-    }
-
-    private void m(LoadResponse<List<Dish>> dishLoadResponse) {
-        if(dishLoadResponse instanceof SuccessLoadResponse) {
-            dishRecyclerViewAdapter.addAll(dishLoadResponse.getResponse());
-        } else {
-            Toast.makeText(MainActivity.this, dishLoadResponse.getError().getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -150,5 +141,4 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    //Test Commit
 }

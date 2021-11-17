@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/actionHistory"
+        android:title="@string/ordersHistory"
+        android:icon="@drawable/ic_history_orders"
+        app:showAsAction="ifRoom"/>
+    <item android:id="@+id/actionClearCart"
+        android:title="@string/clearCart"
+        android:icon="@drawable/ic_clear_cart"
+        app:showAsAction="ifRoom"/>
+</menu>

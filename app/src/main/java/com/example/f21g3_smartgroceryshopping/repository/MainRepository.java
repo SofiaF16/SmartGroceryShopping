@@ -93,11 +93,23 @@ public class MainRepository {
         }
     }
 
-    public long addToCart(StorageCurrentCartItem storageCurrentCartItem) {
+    public RepositoryResponse<StorageCurrentCartItem> getStorageCurrentCartItemByDishId(long dishId) {
+        try {
+            return new RepositoryResponse<>(shoppingDao.getStorageCurrentCartItemByDishId(dishId));
+        } catch (Exception e) {
+            return new RepositoryResponse<>(e);
+        }
+    }
+
+    public long addToCartOrUpdate(StorageCurrentCartItem storageCurrentCartItem) {
+        StorageCurrentCartItem alreadyStoredCartItem = shoppingDao.getStorageCurrentCartItemByDishId(storageCurrentCartItem.dishId);
+        if(alreadyStoredCartItem != null) {
+            storageCurrentCartItem.cartItemKey = alreadyStoredCartItem.cartItemKey;
+        }
         return shoppingDao.insertCartItem(storageCurrentCartItem);
     }
 
-    public long[] addToCart(List<StorageCurrentCartItem> storageCurrentCartItems) {
+    public long[] addToCartOrUpdate(List<StorageCurrentCartItem> storageCurrentCartItems) {
         return shoppingDao.insertCartItem(storageCurrentCartItems);
     }
 

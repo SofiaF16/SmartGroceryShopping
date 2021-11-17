@@ -86,6 +86,7 @@ public class DishDetailsActivity extends AppCompatActivity {
         });
 
         dishDetailsViewModel = new ViewModelProvider(this).get(DishDetailsViewModel.class);
+        subscribeOnDishPortions();
         subscribeOnDishLoadResponse();
         subscribeOnAddDishResponse();
         subscribeOnGetCartSizeResponse();
@@ -99,6 +100,17 @@ public class DishDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(context, DishDetailsActivity.class);
         intent.putExtra(DISH_ID, dishId);
         context.startActivity(intent);
+    }
+
+    private void subscribeOnDishPortions() {
+        dishDetailsViewModel.getDishPortionsNumberResponse().observe(this, new Observer<LoadResponse<Integer>>() {
+            @Override
+            public void onChanged(LoadResponse<Integer> integerLoadResponse) {
+                if(integerLoadResponse.getResponse() != null && integerLoadResponse.getResponse() > 0) {
+                    numberOfPortionsPicker.setValue(integerLoadResponse.getResponse());
+                }
+            }
+        });
     }
 
     private void subscribeOnGetCartSizeResponse() {
@@ -156,7 +168,6 @@ public class DishDetailsActivity extends AppCompatActivity {
         }
 
         if(dishResponse instanceof ErrorLoadResponse) {
-
             Toast.makeText(DishDetailsActivity.this, getString(R.string.error_dish_information_load), Toast.LENGTH_SHORT).show();
             return;
         }

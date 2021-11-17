@@ -99,7 +99,7 @@ public class OrdersHistoryViewModel extends ViewModel {
             mainRepository.deleteAllCartItems();
 
             List<StorageCurrentCartItem> storageCurrentCartItems = toStorageCurrentCartItems(order);
-            long[] longs = mainRepository.addToCart(storageCurrentCartItems);
+            long[] longs = mainRepository.addToCartOrUpdate(storageCurrentCartItems);
 
             if(longs.length != 0) {
                 updateCartResponse.postValue(new SuccessLoadResponse<>(SUCCESS_CART_LOADING));

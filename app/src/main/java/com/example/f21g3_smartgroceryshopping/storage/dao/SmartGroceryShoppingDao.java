@@ -55,8 +55,11 @@ public abstract class SmartGroceryShoppingDao {
     @Transaction
     public abstract StorageDishWithIngredients getStorageDishBy(int dishId);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract long insertCartItem(StorageCurrentCartItem cartItem);
+
+    @Query("SELECT * FROM Cart Where dishId=:dishId")
+    public abstract StorageCurrentCartItem getStorageCurrentCartItemByDishId(long dishId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract long updateCartItems(StorageCurrentCartItem cartItem);

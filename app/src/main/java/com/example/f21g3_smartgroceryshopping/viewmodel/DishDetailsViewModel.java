@@ -36,6 +36,7 @@ public class DishDetailsViewModel extends ViewModel {
 
     private final MutableLiveData<LoadResponse<Dish>> dishResponse = new MutableLiveData<>();
     private final MutableLiveData<LoadResponse<Long>> addToCartResponse = new MutableLiveData<>();
+    private final MutableLiveData<LoadResponse<Integer>> dishPortionsNumberResponse = new MutableLiveData<>();
 
     private final MainRepository mainRepository;
     private final LiveData<Integer> cartItems;
@@ -58,12 +59,21 @@ public class DishDetailsViewModel extends ViewModel {
         return addToCartResponse;
     }
 
+    public LiveData<LoadResponse<Integer>> getDishPortionsNumberResponse() {
+        return dishPortionsNumberResponse;
+    }
+
     public void loadDish(final int dishId) {
         CompletableFuture.runAsync(() -> {
             RepositoryResponse<StorageDishWithIngredients> storageDishResponse = mainRepository.getStorageDishBy(dishId);
 
             LoadResponse<Dish> dishesLoadResponse = prepareResponse(storageDishResponse);
             dishResponse.postValue(dishesLoadResponse);
+
+            RepositoryResponse<StorageCurrentCartItem> currentCartItemRepositoryResponse = mainRepository.getStorageCurrentCartItemByDishId(dishId);
+            if(currentCartItemRepositoryResponse.getResponse() != null) {
+                dishPortionsNumberResponse.postValue(new SuccessLoadResponse<>(currentCartItemRepositoryResponse.getResponse().portions));
+            }
         });
     }
 
@@ -88,7 +98,7 @@ public class DishDetailsViewModel extends ViewModel {
         CompletableFuture.runAsync(() -> {
             addToCartResponse.postValue(new LoadingLoadResponse<>(ADD_TO_CART_LOADING));
 
-            long resultId = mainRepository.addToCart(new StorageCurrentCartItem(dishId, dishTitle, portionsNumber));
+            long resultId = mainRepository.addToCartOrUpdate(new StorageCurrentCartItem(dishId, dishTitle, portionsNumber));
 
             if(resultId == ADD_TO_CART_ERROR) {
                 addToCartResponse.postValue(new ErrorLoadResponse<>(resultId));

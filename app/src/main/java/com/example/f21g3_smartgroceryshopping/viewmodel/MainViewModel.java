@@ -79,7 +79,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void clearCart() {
-        mainRepository.deleteAllCartItems();
+        CompletableFuture.runAsync(mainRepository::deleteAllCartItems);
     }
 
 }

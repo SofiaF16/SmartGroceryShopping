@@ -1,5 +1,6 @@
 package com.example.f21g3_smartgroceryshopping;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
@@ -10,6 +11,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +23,9 @@ import com.example.f21g3_smartgroceryshopping.response.LoadingLoadResponse;
 import com.example.f21g3_smartgroceryshopping.response.SuccessLoadResponse;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.viewmodel.MainViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton fabBasket;
     private List<Dish> DishList = new ArrayList<>();
     private MainViewModel mainViewModel;
+
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +82,22 @@ public class MainActivity extends AppCompatActivity {
         //To be implemented
         fabBasket = findViewById(R.id.fabBasket);
         fabBasket.setOnClickListener((View view) -> Toast.makeText(MainActivity.this, "FAB clicked", Toast.LENGTH_SHORT).show());
+
+        bottomNavigationView = findViewById(R.id.navigation);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.actionHistory:
+                        OrdersHistoryActivity.launch(MainActivity.this);
+                        break;
+                    case R.id.actionClearCart:
+                        mainViewModel.clearCart();
+                        break;
+                }
+                return true;
+            }
+        });
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 

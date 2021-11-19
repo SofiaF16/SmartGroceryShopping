@@ -78,10 +78,8 @@ public class MainActivity extends AppCompatActivity {
         });
         recyclerViewMeals.setAdapter(dishRecyclerViewAdapter);
 
-        //Showing toast for test only
-        //To be implemented
         fabBasket = findViewById(R.id.fabBasket);
-        fabBasket.setOnClickListener((View view) -> Toast.makeText(MainActivity.this, "FAB clicked", Toast.LENGTH_SHORT).show());
+        fabBasket.setOnClickListener((View view) -> CartActivity.launch(MainActivity.this));
 
         bottomNavigationView = findViewById(R.id.navigation);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {

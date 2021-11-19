@@ -27,6 +27,9 @@
     <string name="success_add_dish_to_cart">Dish added successfully</string>
     <string name="ordersHistory">Orders history</string>
     <string name="clearCart">Clear cart</string>
+    <string name="error_cart_item_load">Error of cart items loading</string>
+    <string name="error_ingredient_item_load">Error ingredient items loading</string>
+    <string name="error_post_order_load">Error of order posting</string>
 
 
 </resources>

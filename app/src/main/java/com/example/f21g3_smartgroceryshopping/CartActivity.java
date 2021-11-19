@@ -2,6 +2,7 @@ package com.example.f21g3_smartgroceryshopping;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +20,10 @@ import android.widget.Toast;
 
 import com.example.f21g3_smartgroceryshopping.adapter.CartDishRecyclerViewAdapter;
 import com.example.f21g3_smartgroceryshopping.adapter.CartIngredientRecyclerViewAdapter;
+import com.example.f21g3_smartgroceryshopping.response.ErrorLoadResponse;
+import com.example.f21g3_smartgroceryshopping.response.LoadResponse;
+import com.example.f21g3_smartgroceryshopping.response.LoadingLoadResponse;
+import com.example.f21g3_smartgroceryshopping.response.SuccessLoadResponse;
 import com.example.f21g3_smartgroceryshopping.service.entity.CartItem;
 import com.example.f21g3_smartgroceryshopping.service.entity.CurrentCartItem;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
@@ -81,12 +86,22 @@ public class CartActivity extends AppCompatActivity {
 
         linearLayoutManagerDish = new LinearLayoutManager(this);
         recyclerViewDishes.setLayoutManager(linearLayoutManagerDish);
-        cartDishRecyclerViewAdapter = new CartDishRecyclerViewAdapter(DishList);
+        cartDishRecyclerViewAdapter = new CartDishRecyclerViewAdapter(new CartDishRecyclerViewAdapter.OnCartDishDeleteClickListener() {
+            @Override
+            public void onCartDishClickDelete(CartItem cartItem) {
+                cartViewModel.deleteCartItem(new CurrentCartItem(cartItem.getCartItemKey(), cartItem.getDish().getUid(), cartItem.getDish().getTitle(), cartItem.getPortions()));
+            }
+        }, new CartDishRecyclerViewAdapter.OnCartDishUpdateClickListener() {
+            @Override
+            public void onCartDishClickUpdate(CartItem cartItem) {
+                cartViewModel.updateCartItem(new CurrentCartItem(cartItem.getCartItemKey(), cartItem.getDish().getUid(), cartItem.getDish().getTitle(), cartItem.getPortions()));
+            }
+        });
         recyclerViewDishes.setAdapter(cartDishRecyclerViewAdapter);
 
         linearLayoutManagerIngredient = new LinearLayoutManager(this);
         recyclerViewIngredients.setLayoutManager(linearLayoutManagerIngredient);
-        cartIngredientRecyclerViewAdapter = new CartIngredientRecyclerViewAdapter(IngredientsList);
+        cartIngredientRecyclerViewAdapter = new CartIngredientRecyclerViewAdapter();
         recyclerViewIngredients.setAdapter(cartIngredientRecyclerViewAdapter);
 
         toolbar.setNavigationOnClickListener((View view) -> {
@@ -101,12 +116,27 @@ public class CartActivity extends AppCompatActivity {
         cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
 
         orderBtn.setOnClickListener((View view) -> {
-            setVisibility();
+            if(orderDishesLayout.getVisibility() == View.VISIBLE) {
+                orderDishesLayout.setVisibility(View.GONE);
+                orderIngredientsLayout.setVisibility(View.VISIBLE);
+                cartViewModel.loadIngredientsList();
+            } else if(orderIngredientsLayout.getVisibility() == View.VISIBLE) {
+
+                cartViewModel.postOrder();
+            }
         });
 
         btnBackToMain.setOnClickListener((View view) ->{
             finish();
         });
+
+        subscribeOnCartItemsResponse();
+        subscribeOnIngredientListResponse();
+        subscribeOnPostOrderStatusResponse();
+
+        if (savedInstanceState == null) {
+            cartViewModel.loadCartItems();
+        }
     }
 
     public static void launch(Context context) {
@@ -115,23 +145,88 @@ public class CartActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
-    private void setVisibility(){
-        if(orderDishesLayout.getVisibility() == View.VISIBLE){
-            orderDishesLayout.setVisibility(View.GONE);
-            orderIngredientsLayout.setVisibility(View.VISIBLE);
-        } else if(orderIngredientsLayout.getVisibility() == View.VISIBLE){
+    private void subscribeOnCartItemsResponse(){
+        cartViewModel.getCartItemsResponse().observe(this, new Observer<LoadResponse<List<CartItem>>>() {
+            @Override
+            public void onChanged(LoadResponse<List<CartItem>> listLoadResponse) {
+                handleCartItemsResponse(listLoadResponse);
+            }
+        });
+    }
+
+    private void subscribeOnIngredientListResponse(){
+        cartViewModel.getIngredientsListResponse().observe(this, new Observer<LoadResponse<List<Ingredient>>>() {
+            @Override
+            public void onChanged(LoadResponse<List<Ingredient>> listLoadResponse) {
+                handleIngredientsItemsResponse(listLoadResponse);
+            }
+        });
+    }
+
+    private void subscribeOnPostOrderStatusResponse(){
+        cartViewModel.getPostOrderStatusResponse().observe(this, new Observer<LoadResponse<String>>() {
+            @Override
+            public void onChanged(LoadResponse<String> stringLoadResponse) {
+                handlePostOrderResponse(stringLoadResponse);
+            }
+        });
+    }
+
+
+    private void handleCartItemsResponse(LoadResponse<List<CartItem>> listLoadResponse) {
+
+        if(listLoadResponse instanceof SuccessLoadResponse) {
+            if(listLoadResponse.getResponse() != null) {
+                List<CartItem> cartItems = listLoadResponse.getResponse();
+                cartDishRecyclerViewAdapter.addAll(cartItems);
+            }
+            return;
+        }
+
+        if(listLoadResponse instanceof ErrorLoadResponse) {
+
+            Toast.makeText(CartActivity.this, getString(R.string.error_cart_item_load), Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
+    private void handleIngredientsItemsResponse(LoadResponse<List<Ingredient>> listLoadResponse) {
+
+        if(listLoadResponse instanceof SuccessLoadResponse) {
+            if(listLoadResponse.getResponse() != null) {
+                List<Ingredient> ingredientItems = listLoadResponse.getResponse();
+                cartIngredientRecyclerViewAdapter.addAll(ingredientItems);
+            }
+            return;
+        }
+
+        if(listLoadResponse instanceof ErrorLoadResponse) {
+
+            Toast.makeText(CartActivity.this, getString(R.string.error_ingredient_item_load), Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
+    private void handlePostOrderResponse(LoadResponse<String> stringLoadResponse) {
+        if(stringLoadResponse instanceof LoadingLoadResponse){
             orderIngredientsLayout.setVisibility(View.GONE);
             orderProcessingLayout.setVisibility(View.VISIBLE);
             orderBtn.setVisibility(View.GONE);
-            //test progress bar
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    orderSuccessLayout.setVisibility(View.VISIBLE);
-                    orderProcessingLayout.setVisibility(View.GONE);
-                }
-            }, 3000);
+        }
+        if(stringLoadResponse instanceof SuccessLoadResponse) {
+            if(stringLoadResponse.getResponse() != null) {
+                orderSuccessLayout.setVisibility(View.VISIBLE);
+                orderProcessingLayout.setVisibility(View.GONE);
+            }
+            return;
+        }
+
+        if(stringLoadResponse instanceof ErrorLoadResponse) {
+            orderIngredientsLayout.setVisibility(View.VISIBLE);
+            orderProcessingLayout.setVisibility(View.GONE);
+            orderBtn.setVisibility(View.VISIBLE);
+            Toast.makeText(CartActivity.this, getString(R.string.error_post_order_load), Toast.LENGTH_SHORT).show();
+            return;
         }
     }
 

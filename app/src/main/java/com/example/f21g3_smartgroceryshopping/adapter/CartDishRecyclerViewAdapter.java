@@ -15,14 +15,19 @@ import com.example.f21g3_smartgroceryshopping.R;
 import com.example.f21g3_smartgroceryshopping.service.entity.CartItem;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartDishRecyclerViewAdapter extends RecyclerView.Adapter<CartDishRecyclerViewAdapter.CartDishViewHolder> {
 
     private List<CartItem> CartItemList;
+    private OnCartDishDeleteClickListener onCartDishDeleteClickListener;
+    private OnCartDishUpdateClickListener onCartDishUpdateClickListener;
 
-    public CartDishRecyclerViewAdapter(List<CartItem> cartItemList) {
-        CartItemList = cartItemList;
+    public CartDishRecyclerViewAdapter(OnCartDishDeleteClickListener onCartDishDeleteClickListener, OnCartDishUpdateClickListener onCartDishUpdateClickListener) {
+        CartItemList = new ArrayList<>();
+        this.onCartDishDeleteClickListener = onCartDishDeleteClickListener;
+        this.onCartDishUpdateClickListener = onCartDishUpdateClickListener;
     }
 
 
@@ -44,7 +49,7 @@ public class CartDishRecyclerViewAdapter extends RecyclerView.Adapter<CartDishRe
         return CartItemList.size();
     }
 
-    protected static class CartDishViewHolder extends RecyclerView.ViewHolder {
+    protected class CartDishViewHolder extends RecyclerView.ViewHolder {
 
         private TextView dishName;
         private EditText numOfDishes;
@@ -57,6 +62,19 @@ public class CartDishRecyclerViewAdapter extends RecyclerView.Adapter<CartDishRe
             numOfDishes = itemView.findViewById(R.id.editTextNumOfDishes);
             btnUpdate = itemView.findViewById(R.id.btnUpdate);
             imgCancel = itemView.findViewById(R.id.imgViewCancel);
+            btnUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onCartDishUpdateClickListener.onCartDishClickUpdate(CartItemList.get(getBindingAdapterPosition()));
+                }
+            });
+
+            imgCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onCartDishDeleteClickListener.onCartDishClickDelete(CartItemList.get(getBindingAdapterPosition()));
+                }
+            });
 
         }
     }
@@ -64,6 +82,14 @@ public class CartDishRecyclerViewAdapter extends RecyclerView.Adapter<CartDishRe
         CartItemList.clear();
         CartItemList.addAll(list);
         notifyDataSetChanged();
+    }
+
+    public interface OnCartDishDeleteClickListener{
+        void onCartDishClickDelete(CartItem cartItem);
+    }
+
+    public interface OnCartDishUpdateClickListener{
+        void onCartDishClickUpdate(CartItem cartItem);
     }
 
 }

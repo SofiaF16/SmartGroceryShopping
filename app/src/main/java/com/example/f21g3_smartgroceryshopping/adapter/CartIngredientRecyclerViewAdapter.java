@@ -12,14 +12,15 @@ import com.example.f21g3_smartgroceryshopping.R;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartIngredientRecyclerViewAdapter extends RecyclerView.Adapter<CartIngredientRecyclerViewAdapter.CartIngredientViewHolder>{
 
     private List<Ingredient>IngredientList;
 
-    public CartIngredientRecyclerViewAdapter(List<Ingredient> ingredientList) {
-        IngredientList = ingredientList;
+    public CartIngredientRecyclerViewAdapter() {
+        IngredientList = new ArrayList<>();
     }
 
 

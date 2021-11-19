@@ -9,17 +9,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.f21g3_smartgroceryshopping.R;
+import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 
 import java.util.List;
 
 public class CartIngredientRecyclerViewAdapter extends RecyclerView.Adapter<CartIngredientRecyclerViewAdapter.CartIngredientViewHolder>{
 
+    private List<Ingredient>IngredientList;
+
     public CartIngredientRecyclerViewAdapter(List<Ingredient> ingredientList) {
         IngredientList = ingredientList;
     }
 
-    List<Ingredient>IngredientList;
+
 
     @NonNull
     @Override
@@ -39,15 +42,20 @@ public class CartIngredientRecyclerViewAdapter extends RecyclerView.Adapter<Cart
         return IngredientList.size();
     }
 
-    public class CartIngredientViewHolder extends RecyclerView.ViewHolder {
-        TextView ingredientTitle;
-        TextView ingredientQuantity;
+    protected class CartIngredientViewHolder extends RecyclerView.ViewHolder {
+        private TextView ingredientTitle;
+        private TextView ingredientQuantity;
 
         public CartIngredientViewHolder(@NonNull View itemView) {
             super(itemView);
             ingredientTitle = itemView.findViewById(R.id.txtViewIngredientTitle);
             ingredientQuantity = itemView.findViewById(R.id.txtViewNumOfIngredients);
         }
+    }
+    public void addAll(List<Ingredient> list) {
+        IngredientList.clear();
+        IngredientList.addAll(list);
+        notifyDataSetChanged();
     }
 
 }

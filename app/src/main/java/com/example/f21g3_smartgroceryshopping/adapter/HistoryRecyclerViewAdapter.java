@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.f21g3_smartgroceryshopping.R;
+import com.example.f21g3_smartgroceryshopping.service.entity.CartItem;
 import com.example.f21g3_smartgroceryshopping.service.entity.Order;
 
 import java.text.DateFormat;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecyclerViewAdapter.HistoryViewHolder> {
 
-    List<Order> OrdersList;
+    private List<Order> OrdersList;
 
     public HistoryRecyclerViewAdapter(List<Order> ordersList) {
         OrdersList = ordersList;
@@ -43,14 +44,19 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         return OrdersList.size();
     }
 
-    public class HistoryViewHolder extends RecyclerView.ViewHolder {
-        TextView dishTitle;
-        TextView date;
+    protected class HistoryViewHolder extends RecyclerView.ViewHolder {
+        private TextView dishTitle;
+        private TextView date;
 
         public HistoryViewHolder(@NonNull View itemView) {
             super(itemView);
             dishTitle = itemView.findViewById(R.id.txtViewDishTitle);
             date = itemView.findViewById(R.id.txtViewDate);
         }
+    }
+    public void addAll(List<Order> list) {
+        OrdersList.clear();
+        OrdersList.addAll(list);
+        notifyDataSetChanged();
     }
 }

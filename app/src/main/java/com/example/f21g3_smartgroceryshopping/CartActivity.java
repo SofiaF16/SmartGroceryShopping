@@ -79,23 +79,6 @@ public class CartActivity extends AppCompatActivity {
         btnBackToMain = findViewById(R.id.btnBackToMain);
         orderBtn = findViewById(R.id.fabOrder);
 
-        // mock data to test
-        Ingredient ingredient = new Ingredient(1, "Broccoli", 2, "pounds");
-        Ingredient ingredient2 = new Ingredient(2, "Heavy cream", 250, "ml");
-        Ingredient ingredient3 = new Ingredient(3, "Cheddar cheese", 8, "ounces");
-
-        IngredientsList.add(ingredient);
-        IngredientsList.add(ingredient2);
-        IngredientsList.add(ingredient3);
-
-        Dish dish = new Dish(1,"Toasted Ravioli", "Breaded Deep-Fried Ravioli ", "Dish Desription", "https://www.foodiecrush.com/wp-content/uploads/2019/05/Grilled-Salmon-foodiecrush.com-023.jpg", false, IngredientsList);
-        Dish dish2 = new Dish(2,"Lamb Kofta", "Mediterranean Grilled Lamb", "Dish Desription", "https://www.foodiecrush.com/wp-content/uploads/2019/05/Grilled-Salmon-foodiecrush.com-023.jpg", false, IngredientsList);
-        Dish dish3 = new Dish(3,"Margarita", "Classic Vegetarian Pizza", "Dish Desription", "https://www.foodiecrush.com/wp-content/uploads/2019/05/Grilled-Salmon-foodiecrush.com-023.jpg", false, IngredientsList);
-
-        DishList.add(new CartItem(dish, 2));
-        DishList.add(new CartItem(dish2, 3));
-        DishList.add(new CartItem(dish3, 1));
-
         linearLayoutManagerDish = new LinearLayoutManager(this);
         recyclerViewDishes.setLayoutManager(linearLayoutManagerDish);
         cartDishRecyclerViewAdapter = new CartDishRecyclerViewAdapter(DishList);
@@ -107,43 +90,49 @@ public class CartActivity extends AppCompatActivity {
         recyclerViewIngredients.setAdapter(cartIngredientRecyclerViewAdapter);
 
         toolbar.setNavigationOnClickListener((View view) -> {
-            finish();
+            if(orderIngredientsLayout.getVisibility() == View.VISIBLE){
+                orderDishesLayout.setVisibility(View.VISIBLE);
+                orderIngredientsLayout.setVisibility(View.GONE);
+            } else{
+                finish();
+            }
         });
 
         cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
 
         orderBtn.setOnClickListener((View view) -> {
-                if(orderDishesLayout.getVisibility() == View.VISIBLE){
-                    orderDishesLayout.setVisibility(View.GONE);
-                    orderIngredientsLayout.setVisibility(View.VISIBLE);
-                } else if(orderIngredientsLayout.getVisibility() == View.VISIBLE){
-                    orderIngredientsLayout.setVisibility(View.GONE);
-                    orderProcessingLayout.setVisibility(View.VISIBLE);
-                    orderBtn.setVisibility(View.GONE);
-                    //test progress bar
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            orderSuccessLayout.setVisibility(View.VISIBLE);
-                            orderProcessingLayout.setVisibility(View.GONE);
-                        }
-                    }, 3000);
-                }
-            });
+            setVisibility();
+        });
 
         btnBackToMain.setOnClickListener((View view) ->{
             finish();
         });
-
-
     }
-
 
     public static void launch(Context context) {
         Intent intent = new Intent(context, CartActivity.class);
 
         context.startActivity(intent);
+    }
+
+    private void setVisibility(){
+        if(orderDishesLayout.getVisibility() == View.VISIBLE){
+            orderDishesLayout.setVisibility(View.GONE);
+            orderIngredientsLayout.setVisibility(View.VISIBLE);
+        } else if(orderIngredientsLayout.getVisibility() == View.VISIBLE){
+            orderIngredientsLayout.setVisibility(View.GONE);
+            orderProcessingLayout.setVisibility(View.VISIBLE);
+            orderBtn.setVisibility(View.GONE);
+            //test progress bar
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    orderSuccessLayout.setVisibility(View.VISIBLE);
+                    orderProcessingLayout.setVisibility(View.GONE);
+                }
+            }, 3000);
+        }
     }
 
 }

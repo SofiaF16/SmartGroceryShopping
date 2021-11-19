@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.f21g3_smartgroceryshopping.R;
 import com.example.f21g3_smartgroceryshopping.service.entity.CartItem;
+import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 
 import java.util.List;
 
@@ -43,12 +44,12 @@ public class CartDishRecyclerViewAdapter extends RecyclerView.Adapter<CartDishRe
         return CartItemList.size();
     }
 
-    public static class CartDishViewHolder extends RecyclerView.ViewHolder {
+    protected static class CartDishViewHolder extends RecyclerView.ViewHolder {
 
-        TextView dishName;
-        EditText numOfDishes;
-        Button btnUpdate;
-        ImageView imgCancel;
+        private TextView dishName;
+        private EditText numOfDishes;
+        private Button btnUpdate;
+        private ImageView imgCancel;
 
         public CartDishViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,6 +59,11 @@ public class CartDishRecyclerViewAdapter extends RecyclerView.Adapter<CartDishRe
             imgCancel = itemView.findViewById(R.id.imgViewCancel);
 
         }
+    }
+    public void addAll(List<CartItem> list) {
+        CartItemList.clear();
+        CartItemList.addAll(list);
+        notifyDataSetChanged();
     }
 
 }

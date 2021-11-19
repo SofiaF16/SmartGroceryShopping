@@ -79,10 +79,11 @@ public class CartViewModel extends ViewModel {
             List<CartItem> cartItems = new ArrayList<>(repositoryResponse.getResponse().size());
 
             for (StorageCurrentCartItemAndDishWithIngredients item: repositoryResponse.getResponse()) {
+                int cartItemKey = item.storageCurrentCartItem.cartItemKey;
                 StorageDishWithIngredients storageDishWithIngredients = item.storageDishWithIngredients;
                 Dish dish = toDish(storageDishWithIngredients.storageDish, toIngredients(storageDishWithIngredients.ingredients));
 
-                cartItems.add(new CartItem(dish, item.storageCurrentCartItem.portions));
+                cartItems.add(new CartItem(cartItemKey, dish, item.storageCurrentCartItem.portions));
             }
 
             return new SuccessLoadResponse<>(cartItems);

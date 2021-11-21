@@ -18,11 +18,13 @@ public class FullIngredientsListMaker {
             for (StorageIngredient ingredient : cartItem.storageDishWithIngredients.ingredients) {
                 if(map.containsKey(ingredient.title)) {
                     Ingredient currentIngredient = map.get(ingredient.title);
-                    Ingredient updatedIngredient = getMergedQuantitiesIngredient(currentIngredient, ingredient);
+                    Ingredient updatedIngredient = getMergedQuantitiesIngredient(currentIngredient, ingredient, cartItem.storageCurrentCartItem.portions);
 
                     map.put(ingredient.title, updatedIngredient);
                 } else {
-                    map.put(ingredient.title, new Ingredient(ingredient.uid, ingredient.title, ingredient.quantity, ingredient.quantityUnit));
+                    map.put(ingredient.title, new Ingredient(ingredient.uid, ingredient.title,
+                            ingredient.quantity * cartItem.storageCurrentCartItem.portions,
+                            ingredient.quantityUnit));
                 }
             }
         }
@@ -30,10 +32,12 @@ public class FullIngredientsListMaker {
         return new ArrayList<>(map.values());
     }
 
-    private Ingredient getMergedQuantitiesIngredient(Ingredient currentIngredient, StorageIngredient ingredientToAdd) {
+    private Ingredient getMergedQuantitiesIngredient(Ingredient currentIngredient, StorageIngredient ingredientToAdd, int numberOfPortions) {
+        double newQuantity = currentIngredient.getQuantity() + (ingredientToAdd.quantity * numberOfPortions);
+
         return new Ingredient(currentIngredient.getUid(),
                 currentIngredient.getTitle(),
-                currentIngredient.getQuantity() + ingredientToAdd.quantity,
+                newQuantity,
                 currentIngredient.getQuantityUnit());
     }
 

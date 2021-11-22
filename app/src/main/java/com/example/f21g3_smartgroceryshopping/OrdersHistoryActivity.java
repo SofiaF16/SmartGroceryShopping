@@ -2,6 +2,7 @@ package com.example.f21g3_smartgroceryshopping;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,8 +12,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.example.f21g3_smartgroceryshopping.adapter.DishRecyclerViewAdapter;
 import com.example.f21g3_smartgroceryshopping.adapter.HistoryRecyclerViewAdapter;
+import com.example.f21g3_smartgroceryshopping.response.ErrorLoadResponse;
+import com.example.f21g3_smartgroceryshopping.response.LoadResponse;
+import com.example.f21g3_smartgroceryshopping.response.LoadingLoadResponse;
+import com.example.f21g3_smartgroceryshopping.response.SuccessLoadResponse;
 import com.example.f21g3_smartgroceryshopping.service.entity.CartItem;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
@@ -52,45 +59,90 @@ public class OrdersHistoryActivity extends AppCompatActivity {
         toolbar.setNavigationIcon(R.drawable.back_arrow);
         setSupportActionBar(toolbar);
 
-        // mock data to test
-        //    public Order(int orderId, Date orderDate, List<OrderItem> orderItems) {
-        Date date = new Date();
-
-        //public OrderItem(long dishId, String dishTitle, int portions) {
-
-        List<OrderItem> orderItems = new ArrayList<>(Arrays.asList());
-        OrderItem orderItem = new OrderItem(1, "Toasted Ravioli", 2);
-        OrderItem orderItem2 = new OrderItem(1, "Lamb Kofta", 1);
-        OrderItem orderItem3 = new OrderItem(1, "Margarita", 3);
-        orderItems.add(orderItem);
-        orderItems.add(orderItem2);
-        orderItems.add(orderItem3);
-
-        Order order = new Order(1,date, orderItems);
-        Order order2 = new Order(2,date, orderItems);
-        Order order3 = new Order(3,date, orderItems);
-
-        OrdersList.add(order);
-        OrdersList.add(order2);
-        OrdersList.add(order3);
 
         recyclerViewHistory = findViewById(R.id.recyclerViewHistory);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewHistory.setLayoutManager(linearLayoutManager);
-        historyRecyclerViewAdapter = new HistoryRecyclerViewAdapter(OrdersList);
+        historyRecyclerViewAdapter = new HistoryRecyclerViewAdapter(new HistoryRecyclerViewAdapter.OnOrderHistoryClickListener() {
+            @Override
+            public void onOrderHistoryClick(Order order) {
+                ordersHistoryViewModel.updateCartWith(order);
+            }
+        });
+
         recyclerViewHistory.setAdapter(historyRecyclerViewAdapter);
 
         toolbar.setNavigationOnClickListener((View view) -> {
             finish();
         });
-    }
+        subscribeOnOrderHistoryResponse();
+        subscribeOnUpdateCartResponse();
+        //ordersHistoryViewModel.updateCartWith(); when clicked on item in the recyclerView
+        //ordersHistoryViewModel.getUpdateCartResponse(); when success launch CartActivity and finish OrderHistory, if error - toast
+//        ordersHistoryViewModel.loadOrders(); to get orders list
 
+        if (savedInstanceState == null) {
+            ordersHistoryViewModel.loadOrders();
+        }
+    }
 
     public static void launch(Context context) {
         Intent intent = new Intent(context, OrdersHistoryActivity.class);
 
         context.startActivity(intent);
     }
+
+    private void subscribeOnOrderHistoryResponse(){
+        ordersHistoryViewModel.getOrderResponse().observe(this, new Observer<LoadResponse<List<Order>>>() {
+            @Override
+            public void onChanged(LoadResponse<List<Order>> listLoadResponse) {
+                handleOrderHistoryResponse(listLoadResponse);
+            }
+        });
+    }
+
+    private void subscribeOnUpdateCartResponse(){
+        ordersHistoryViewModel.getUpdateCartResponse().observe(this, new Observer<LoadResponse<Long>>() {
+            @Override
+            public void onChanged(LoadResponse<Long> longLoadResponse) {
+                handleUpdateCartResponse(longLoadResponse);
+            }
+        });
+    }
+
+    private void handleOrderHistoryResponse(LoadResponse<List<Order>> listLoadResponse){
+
+        if(listLoadResponse instanceof SuccessLoadResponse) {
+            if(listLoadResponse.getResponse() != null) {
+                List<Order> orderItems = listLoadResponse.getResponse();
+                historyRecyclerViewAdapter.addAll(orderItems);
+            }
+            return;
+        }
+
+        if(listLoadResponse instanceof ErrorLoadResponse) {
+
+            Toast.makeText(OrdersHistoryActivity.this, getString(R.string.error_order_history_load), Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
+    private void handleUpdateCartResponse(LoadResponse<Long> longLoadResponse){
+
+        if(longLoadResponse instanceof SuccessLoadResponse) {
+            CartActivity.launch(OrdersHistoryActivity.this);
+            finish();
+            return;
+        }
+
+        if(longLoadResponse instanceof ErrorLoadResponse) {
+
+            Toast.makeText(OrdersHistoryActivity.this, getString(R.string.error_update_cart_load), Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
+
 
 }
 

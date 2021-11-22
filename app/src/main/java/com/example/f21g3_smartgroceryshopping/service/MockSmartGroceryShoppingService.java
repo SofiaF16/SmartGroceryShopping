@@ -67,14 +67,42 @@ public class MockSmartGroceryShoppingService implements SmartGroceryShoppingServ
         Dish secondDish = new Dish(2,
                 "Manty",
                 "Manty is a type of dumpling popular in most Turkic cuisines, as well as in the cuisines of the South Caucasus and Balkans",
-                "The dumplings typically consist of a spiced meat mixture, usually lamb or ground beef, in a thin dough wrapper and either boiled or steamed. Size and shape vary significantly depending on the geographical location.[1] Manti resemble the Chinese jiaozi and baozi, Korean mandu, Mongolian buuz and the Tibetan momo and the dish's name is cognate with the Korean mandu, Chinese mantou and Japanese manjū, although the modern Chinese and Japanese counterparts refer to different dishes",
+                "The dumplings typically consist of a spiced meat mixture, usually lamb or ground beef, in a thin dough wrapper and either boiled or steamed. Size and shape vary significantly depending on the geographical location.[1] Manti resemble the Chinese jiaozi and baozi, Korean mandu, Mongolian buuz and the Tibetan momo and the dish's name is cognate with the Korean mandu, Chinese mantou and Japanese manjū, although the modern Chinese and Japanese counterparts refer to different dishes.",
                 "https://drive.google.com/uc?export=download&id=1rAZJy9iYfMAPFbqedMDPF0s4nOOPUPQU",
                 false,
                 secondDishIngredients);
 
+        // Third dish
+
+        Ingredient oliveOil2 = new Ingredient(19, "oliveOil", 1, "tbsp");
+        Ingredient bacon = new Ingredient(20, "bacon", 60, "g");
+        Ingredient garlic  = new Ingredient(21, "garlic ", 1, "clove");
+        Ingredient eggs2 = new Ingredient(22, "eggs", 1, "item");
+        Ingredient parmesan  = new Ingredient(23, "parmesan", 0.25, "cup");
+        Ingredient salt3 = new Ingredient(24, "salt", 2, "g");
+        Ingredient spaghetti  = new Ingredient(25, "spaghetti ", 125, "g");
+
+
+        List<Ingredient> thirdDishIngredients = new ArrayList<>();
+        thirdDishIngredients.add(oliveOil2);
+        thirdDishIngredients.add(bacon);
+        thirdDishIngredients.add(garlic);
+        thirdDishIngredients.add(eggs2);
+        thirdDishIngredients.add(parmesan);
+        thirdDishIngredients.add(salt3);
+        thirdDishIngredients.add(spaghetti);
+
+        Dish thirdDish = new Dish(3, "Pasta Carbonara",
+                "Carbonara is an Italian pasta dish from Rome made with eggs, hard cheese, cured pork, and black pepper.",
+                "The dish arrived at its modern form, with its current name, in the middle of the 20th century. The cheese is usually Pecorino Romano, Parmigiano-Reggiano, or a combination of the two. Spaghetti is the most common pasta, but fettuccine, rigatoni, linguine, or bucatini are also used. Normally guanciale or pancetta are used for the meat component, but lardons of smoked bacon are a common substitute outside Italy.",
+                "https://drive.google.com/uc?export=download&id=13JpN6PLJ-jkN1rGfxI4dpyKYts283Ulw",
+                false,
+                thirdDishIngredients);
+
         List<Dish> list = new ArrayList<>();
         list.add(firstDish);
         list.add(secondDish);
+        list.add(thirdDish);
 
         try {
             Thread.sleep(2000);

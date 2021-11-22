@@ -1,5 +1,6 @@
 package com.example.f21g3_smartgroceryshopping.adapter;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +11,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.f21g3_smartgroceryshopping.R;
 import com.example.f21g3_smartgroceryshopping.service.entity.CartItem;
+import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Order;
+import com.example.f21g3_smartgroceryshopping.service.entity.OrderItem;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecyclerViewAdapter.HistoryViewHolder> {
 
     private List<Order> OrdersList;
+    private List<OrderItem> OrderItemList;
+    private OnOrderHistoryClickListener onOrderHistoryClickListener;
 
-    public HistoryRecyclerViewAdapter(List<Order> ordersList) {
-        OrdersList = ordersList;
+
+    public HistoryRecyclerViewAdapter(OnOrderHistoryClickListener onOrderHistoryClickListener) {
+        this.onOrderHistoryClickListener = onOrderHistoryClickListener;
+        OrdersList = new ArrayList<>();
+        OrderItemList = new ArrayList<>();
     }
 
     @NonNull
@@ -34,9 +44,24 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
 
     @Override
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        holder.dishTitle.setText(OrdersList.get(position).getOrderItems().get(position).getDishTitle());
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        List<OrderItem> list = OrdersList.get(position).getOrderItems();
+        holder.dishTitle.setText(combineDishTitles(list));
         holder.date.setText(dateFormat.format(OrdersList.get(position).getOrderDate()));
+    }
+
+    private String combineDishTitles(List<OrderItem> orderItems){
+        StringBuilder str = new StringBuilder("");
+        for(int i=0; i < orderItems.size(); i++){
+            str.append(orderItems.get(i).getDishTitle()).append(", ");
+            if(i>=2){
+                break;
+            }
+        }
+        if(str.length() > 0){
+            str.setLength(str.length() - 2);
+        }
+        return str.toString();
     }
 
     @Override
@@ -44,7 +69,7 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         return OrdersList.size();
     }
 
-    protected class HistoryViewHolder extends RecyclerView.ViewHolder {
+    protected class HistoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView dishTitle;
         private TextView date;
 
@@ -52,6 +77,11 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
             super(itemView);
             dishTitle = itemView.findViewById(R.id.txtViewDishTitle);
             date = itemView.findViewById(R.id.txtViewDate);
+            itemView.setOnClickListener(this);
+        }
+        @Override
+        public void onClick(View view) {
+            onOrderHistoryClickListener.onOrderHistoryClick(OrdersList.get(getBindingAdapterPosition()));
         }
     }
     public void addAll(List<Order> list) {
@@ -59,4 +89,11 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
         OrdersList.addAll(list);
         notifyDataSetChanged();
     }
+
+    public interface OnOrderHistoryClickListener{
+        void onOrderHistoryClick(Order order);
+    }
+
+
+
 }

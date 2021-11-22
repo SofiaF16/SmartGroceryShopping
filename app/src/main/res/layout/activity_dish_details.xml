@@ -135,6 +135,7 @@ tools:context=".DishDetailsActivity">
     android:layout_margin="16dp"
     android:contentDescription="@string/fabAddToCart"
     android:src="@drawable/icon_add_to_cart"
+    app:maxImageSize="40dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent" />
 

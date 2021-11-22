@@ -65,7 +65,8 @@ public class CartDishRecyclerViewAdapter extends RecyclerView.Adapter<CartDishRe
             btnUpdate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onCartDishUpdateClickListener.onCartDishClickUpdate(CartItemList.get(getBindingAdapterPosition()));
+                    onCartDishUpdateClickListener.onCartDishClickUpdate(CartItemList.get(getBindingAdapterPosition()),
+                            Integer.parseInt(numOfDishes.getText().toString()));
                 }
             });
 
@@ -89,7 +90,7 @@ public class CartDishRecyclerViewAdapter extends RecyclerView.Adapter<CartDishRe
     }
 
     public interface OnCartDishUpdateClickListener{
-        void onCartDishClickUpdate(CartItem cartItem);
+        void onCartDishClickUpdate(CartItem cartItem, int portions);
     }
 
 }

@@ -30,6 +30,9 @@
     <string name="error_cart_item_load">Error of cart items loading</string>
     <string name="error_ingredient_item_load">Error ingredient items loading</string>
     <string name="error_post_order_load">Error of order posting</string>
-
+    <string name="error_update_cart_load">Error of cart updating</string>
+    <string name="error_order_history_load">Error of order history loading</string>
+    <string name="item_updated_message">Item updated</string>
+    <string name="empty_cart_error_message">Cart is empty! Add some dishes first!</string>
 
 </resources>

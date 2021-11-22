@@ -93,8 +93,9 @@ public class CartActivity extends AppCompatActivity {
             }
         }, new CartDishRecyclerViewAdapter.OnCartDishUpdateClickListener() {
             @Override
-            public void onCartDishClickUpdate(CartItem cartItem) {
-                cartViewModel.updateCartItem(new CurrentCartItem(cartItem.getCartItemKey(), cartItem.getDish().getUid(), cartItem.getDish().getTitle(), cartItem.getPortions()));
+            public void onCartDishClickUpdate(CartItem cartItem, int portions) {
+                cartViewModel.updateCartItem(new CurrentCartItem(cartItem.getCartItemKey(), cartItem.getDish().getUid(), cartItem.getDish().getTitle(), portions));
+                Toast.makeText(CartActivity.this, getString(R.string.item_updated_message), Toast.LENGTH_SHORT).show();
             }
         });
         recyclerViewDishes.setAdapter(cartDishRecyclerViewAdapter);
@@ -116,6 +117,12 @@ public class CartActivity extends AppCompatActivity {
         cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
 
         orderBtn.setOnClickListener((View view) -> {
+            // if cart is empty - forbid going to ingredients calculation
+            if(orderDishesLayout.getVisibility() == View.VISIBLE && cartDishRecyclerViewAdapter.getItemCount() == 0) {
+                Toast.makeText(CartActivity.this, getString(R.string.empty_cart_error_message), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if(orderDishesLayout.getVisibility() == View.VISIBLE) {
                 orderDishesLayout.setVisibility(View.GONE);
                 orderIngredientsLayout.setVisibility(View.VISIBLE);

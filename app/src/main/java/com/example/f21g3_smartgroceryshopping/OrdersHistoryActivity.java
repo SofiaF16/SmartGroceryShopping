@@ -43,8 +43,6 @@ public class OrdersHistoryActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private RecyclerView recyclerViewHistory;
     private LinearLayoutManager linearLayoutManager;
-
-    private List<Order> OrdersList = new ArrayList<>();
     private HistoryRecyclerViewAdapter historyRecyclerViewAdapter;
 
     @Override
@@ -77,9 +75,6 @@ public class OrdersHistoryActivity extends AppCompatActivity {
         });
         subscribeOnOrderHistoryResponse();
         subscribeOnUpdateCartResponse();
-        //ordersHistoryViewModel.updateCartWith(); when clicked on item in the recyclerView
-        //ordersHistoryViewModel.getUpdateCartResponse(); when success launch CartActivity and finish OrderHistory, if error - toast
-//        ordersHistoryViewModel.loadOrders(); to get orders list
 
         if (savedInstanceState == null) {
             ordersHistoryViewModel.loadOrders();

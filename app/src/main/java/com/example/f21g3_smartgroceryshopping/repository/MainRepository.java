@@ -148,4 +148,7 @@ public class MainRepository {
         return currentCartItem;
     }
 
+    public boolean postOrder(StorageOrderWithOrderItems storageOrderWithOrderItems) {
+        return shoppingService.postOrder(storageOrderWithOrderItems);
+    }
 }

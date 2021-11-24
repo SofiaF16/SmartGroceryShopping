@@ -47,7 +47,7 @@ public abstract class SmartGroceryShoppingDao {
     @Query("SELECT * FROM Cart")
     public abstract List<StorageCurrentCartItem> getCartItems();
 
-    @Query("SELECT * FROM `Order`")
+    @Query("SELECT * FROM `Order` order by orderId desc")
     @Transaction
     public abstract List<StorageOrderWithOrderItems> getAllOrders();
 

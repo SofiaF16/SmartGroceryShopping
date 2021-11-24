@@ -2,11 +2,14 @@ package com.example.f21g3_smartgroceryshopping.service;
 
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
+import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrderWithOrderItems;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MockSmartGroceryShoppingService implements SmartGroceryShoppingService {
+
+    private static final long SLEEP_TIME = 3000;
 
     @Override
     public List<Dish> getDishes() {
@@ -104,13 +107,23 @@ public class MockSmartGroceryShoppingService implements SmartGroceryShoppingServ
         list.add(secondDish);
         list.add(thirdDish);
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-        }
+        internetDelay();
 
         return list;
+    }
+
+    @Override
+    public boolean postOrder(StorageOrderWithOrderItems storageOrderWithOrderItems) {
+        internetDelay();
+        return true;
+    }
+
+    private void internetDelay() {
+        try {
+            Thread.sleep(SLEEP_TIME);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

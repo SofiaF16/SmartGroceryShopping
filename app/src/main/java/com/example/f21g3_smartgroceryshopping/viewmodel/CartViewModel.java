@@ -37,8 +37,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class CartViewModel extends ViewModel {
 
-    private static final long SLEEP_TIME = 3000;
-
     private final MutableLiveData<LoadResponse<List<CartItem>>> cartItemsResponse = new MutableLiveData<>();
     private final MutableLiveData<LoadResponse<List<Ingredient>>> fullIngredientsListResponse = new MutableLiveData<>();
     private final MutableLiveData<LoadResponse<String>> postOrderStatusResponse = new MutableLiveData<>();
@@ -108,25 +106,19 @@ public class CartViewModel extends ViewModel {
         CompletableFuture.runAsync(() -> {
             postOrderStatusResponse.postValue(new LoadingLoadResponse<>(""));
 
-            internetDelay();
-
             List<StorageCurrentCartItem> currentCartItems = mainRepository.getCartItems();
             StorageOrderWithOrderItems storageOrderWithOrderItems = createStorageOrderWithCartItems(currentCartItems);
-            List<Long> result = mainRepository.addToHistory(storageOrderWithOrderItems);
 
-            mainRepository.deleteAllCartItems();
+            if(mainRepository.postOrder(storageOrderWithOrderItems)) {
+                List<Long> result = mainRepository.addToHistory(storageOrderWithOrderItems);
 
-            LoadResponse<String> response = prepareResponse(result);
-            postOrderStatusResponse.postValue(response);
+                mainRepository.deleteAllCartItems();
+                LoadResponse<String> response = prepareResponse(result);
+                postOrderStatusResponse.postValue(response);
+            } else {
+                postOrderStatusResponse.postValue(new ErrorLoadResponse<>(""));
+            }
         });
-    }
-
-    private void internetDelay() {
-        try {
-            Thread.sleep(SLEEP_TIME);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private StorageOrderWithOrderItems createStorageOrderWithCartItems(List<StorageCurrentCartItem> currentCartItems) {

@@ -11,6 +11,9 @@ import java.util.Map;
 
 public class FullIngredientsListMaker {
 
+    private static final int roundCoefficient = 10;
+    private static final int numberOfFractionNumbers = 3;
+
     public List<Ingredient> makeFullIngredientList(List<StorageCurrentCartItemAndDishWithIngredients> cartItems) {
         Map<String, Ingredient> map = new HashMap<>();
 
@@ -23,7 +26,7 @@ public class FullIngredientsListMaker {
                     map.put(ingredient.title, updatedIngredient);
                 } else {
                     map.put(ingredient.title, new Ingredient(ingredient.uid, ingredient.title,
-                            ingredient.quantity * cartItem.storageCurrentCartItem.portions,
+                            roundTo(ingredient.quantity * cartItem.storageCurrentCartItem.portions, numberOfFractionNumbers),
                             ingredient.quantityUnit));
                 }
             }
@@ -34,11 +37,17 @@ public class FullIngredientsListMaker {
 
     private Ingredient getMergedQuantitiesIngredient(Ingredient currentIngredient, StorageIngredient ingredientToAdd, int numberOfPortions) {
         double newQuantity = currentIngredient.getQuantity() + (ingredientToAdd.quantity * numberOfPortions);
+        newQuantity = roundTo(newQuantity, numberOfFractionNumbers);
 
         return new Ingredient(currentIngredient.getUid(),
                 currentIngredient.getTitle(),
                 newQuantity,
                 currentIngredient.getQuantityUnit());
+    }
+
+    private double roundTo(double newQuantity, int numberOfFractionNumbers) {
+        double scale = Math.pow(roundCoefficient, numberOfFractionNumbers);
+        return Math.round(newQuantity * scale) / scale;
     }
 
 }

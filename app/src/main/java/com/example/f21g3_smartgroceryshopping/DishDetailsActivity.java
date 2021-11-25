@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
@@ -58,6 +59,11 @@ public class DishDetailsActivity extends AppCompatActivity {
         toolbarDishDetails = findViewById(R.id.toolbarDishDetails);
         toolbarDishDetails.setNavigationIcon(R.drawable.back_arrow);
         setSupportActionBar(toolbarDishDetails);
+        toolbarDishDetails.setOnMenuItemClickListener((MenuItem item) -> {
+            CartActivity.launch(DishDetailsActivity.this);
+            return true;
+        });
+
         toolbarDishDetails.setNavigationOnClickListener((View view) -> {
             finish();
         });

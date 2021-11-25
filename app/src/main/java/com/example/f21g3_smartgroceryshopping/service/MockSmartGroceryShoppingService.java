@@ -102,10 +102,43 @@ public class MockSmartGroceryShoppingService implements SmartGroceryShoppingServ
                 false,
                 thirdDishIngredients);
 
+        // Fourth Dish
+
+        Ingredient sweetPotato = new Ingredient(19, "sweet potato", 50, "g");
+        Ingredient sugar = new Ingredient(20, "sugar", 33, "g");
+        Ingredient eggs3 = new Ingredient(21, "eggs", 1, "item");
+        Ingredient salt4 = new Ingredient(22, "salt", 5, "g");
+        Ingredient flour2 = new Ingredient(22, "salt", 11, "g");
+        Ingredient butter = new Ingredient(23, "butter", 16, "ml");
+        Ingredient milk = new Ingredient(24, "milk", 18, "g");
+        Ingredient vanillaExtract = new Ingredient(25, "vanilla extract", 4, "g");
+        Ingredient pecans = new Ingredient(26, "black pepper", 9, "g");
+
+
+        List<Ingredient> fourthDishIngredients = new ArrayList<>();
+        fourthDishIngredients.add(sweetPotato);
+        fourthDishIngredients.add(sugar);
+        fourthDishIngredients.add(eggs3);
+        fourthDishIngredients.add(salt4);
+        fourthDishIngredients.add(flour2);
+        fourthDishIngredients.add(butter);
+        fourthDishIngredients.add(milk);
+        fourthDishIngredients.add(vanillaExtract);
+        fourthDishIngredients.add(pecans);
+
+
+        Dish fourthDish = new Dish(4, "Sweet Potato Casserole",
+                "Sweet Potato Casserole is a southern-style casserole that is a dessert-like side dish.",
+                "The sweet potato casserole with pecans recipe originated in the South, and early variations of the recipe included different ingredients like cream or milk. It is made of cooked and mashed sweet potatoes combined with sugar, butter, vanilla, milk and eggs. In this recipe, the sweet potato mixture is then topped with a pecan topping and baked until golden brown.",
+                "https://drive.google.com/uc?export=download&id=19ZLtkW3m7-eQUwg1iPyEAw7w6Tz_4Wkn",
+                false,
+                fourthDishIngredients);
+
         List<Dish> list = new ArrayList<>();
         list.add(firstDish);
         list.add(secondDish);
         list.add(thirdDish);
+        list.add(fourthDish);
 
         internetDelay();
 

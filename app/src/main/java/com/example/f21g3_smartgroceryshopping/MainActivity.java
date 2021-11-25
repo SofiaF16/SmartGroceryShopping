@@ -55,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
         toolbarMain = findViewById(R.id.toolbarMain);
         setSupportActionBar(toolbarMain);
 
+        toolbarMain.setOnMenuItemClickListener((MenuItem item) -> {
+            CartActivity.launch(MainActivity.this);
+            return true;
+        });
+
         cartSizeTextView = findViewById(R.id.textViewCartSizeMain);
 
         swipeContainer = findViewById(R.id.swipeContainer);

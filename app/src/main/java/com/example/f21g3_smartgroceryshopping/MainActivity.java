@@ -56,7 +56,14 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbarMain);
 
         toolbarMain.setOnMenuItemClickListener((MenuItem item) -> {
-            CartActivity.launch(MainActivity.this);
+            if (item.getItemId() == R.id.iconToolbarCart) {
+                if (mainViewModel.getCartSize().getValue() != 0) {
+                    CartActivity.launch(MainActivity.this);
+                } else {
+                    Toast.makeText(MainActivity.this,
+                            "The Cart Is Empty. \nPlease Add A Dish And Try Again.", Toast.LENGTH_LONG).show();
+                }
+            }
             return true;
         });
 

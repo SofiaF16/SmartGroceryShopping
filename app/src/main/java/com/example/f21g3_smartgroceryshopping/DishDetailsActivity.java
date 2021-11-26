@@ -60,7 +60,15 @@ public class DishDetailsActivity extends AppCompatActivity {
         toolbarDishDetails.setNavigationIcon(R.drawable.back_arrow);
         setSupportActionBar(toolbarDishDetails);
         toolbarDishDetails.setOnMenuItemClickListener((MenuItem item) -> {
-            CartActivity.launch(DishDetailsActivity.this);
+            if (item.getItemId() == R.id.iconToolbarCart) {
+                if (dishDetailsViewModel.getCartSize().getValue() != 0) {
+                    CartActivity.launch(DishDetailsActivity.this);
+                    finish();
+                } else {
+                    Toast.makeText(DishDetailsActivity.this,
+                            "The Cart Is Empty. \nPlease Add A Dish And Try Again.", Toast.LENGTH_LONG).show();
+                }
+            }
             return true;
         });
 

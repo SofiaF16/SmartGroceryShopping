@@ -9,11 +9,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A class helping to calculate the full list of ingredients based on the current dishes in the cart and it's portions number
+ */
 public class FullIngredientsListMaker {
 
     private static final int roundCoefficient = 10;
     private static final int numberOfFractionNumbers = 3;
 
+    /**
+     * Calculates the full list of ingredients
+     * @param cartItems the list of dishes stored in the Cart table as well as the portions ordered
+     * @return the full list of ingredients
+     */
     public List<Ingredient> makeFullIngredientList(List<StorageCurrentCartItemAndDishWithIngredients> cartItems) {
         Map<String, Ingredient> map = new HashMap<>();
 

@@ -5,6 +5,9 @@ import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrderWithOrd
 
 import java.util.List;
 
+/**
+ * An interface acting as a middleclass between the app and the backend
+ */
 public interface SmartGroceryShoppingService {
 
     List<Dish> getDishes();

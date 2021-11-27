@@ -10,6 +10,9 @@ import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.components.SingletonComponent;
 
+/**
+ * Module class providing the backend api
+ */
 @Module
 @InstallIn(SingletonComponent.class)
 public class SmartGroceryShoppingServiceModule {

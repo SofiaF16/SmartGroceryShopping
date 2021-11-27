@@ -50,18 +50,30 @@ public class CartViewModel extends ViewModel {
         this.fullIngredientsListMaker = fullIngredientsListMaker;
     }
 
+    /**
+     * @return liveData object holding the result of completion of loadCartItems(), updateCartItem(), and deleteCartItem();
+     */
     public LiveData<LoadResponse<List<CartItem>>> getCartItemsResponse() {
         return cartItemsResponse;
     }
 
+    /**
+     * @return liveData object holding the result of completion of loadIngredientsList()
+     */
     public LiveData<LoadResponse<List<Ingredient>>> getIngredientsListResponse() {
         return fullIngredientsListResponse;
     }
 
+    /**
+     * @return liveData object holding the result of completion of postOrder()
+     */
     public LiveData<LoadResponse<String>> getPostOrderStatusResponse() {
         return postOrderStatusResponse;
     }
 
+    /**
+     * triggers the loading of cart items stored in the cart table and returns the result to cartItemsResponse
+     */
     public void loadCartItems() {
         CompletableFuture.runAsync(this::refreshCartItems);
     }
@@ -90,6 +102,9 @@ public class CartViewModel extends ViewModel {
         return new ErrorLoadResponse<>(repositoryResponse.getError());
     }
 
+    /**
+     * triggers the generating and returning of the full list of ingredients. The result will be returned to fullIngredientsListResponse
+     */
     public void loadIngredientsList() {
         CompletableFuture.runAsync(() -> {
             RepositoryResponse<List<StorageCurrentCartItemAndDishWithIngredients>> response = mainRepository.getCartItemsWithDishesAndIngredients();
@@ -102,6 +117,9 @@ public class CartViewModel extends ViewModel {
         });
     }
 
+    /**
+     * triggers the posting of the order to backend, saves the order in the orders history table. The result will be returned to postOrderStatusResponse
+     */
     public void postOrder() {
         CompletableFuture.runAsync(() -> {
             postOrderStatusResponse.postValue(new LoadingLoadResponse<>(""));
@@ -148,6 +166,10 @@ public class CartViewModel extends ViewModel {
         return new ErrorLoadResponse<>("");
     }
 
+    /**
+     * updates cart item, cart item table, and triggers the loading of the new cart items list. The result will be returned to cartItemsResponse
+     * @param currentCartItem
+     */
     public void updateCartItem(final CurrentCartItem currentCartItem) {
         CompletableFuture.runAsync(() -> {
             long l = mainRepository.updateCurrentCartItem(currentCartItem);
@@ -160,6 +182,10 @@ public class CartViewModel extends ViewModel {
         });
     }
 
+    /**
+     * updates cart item, cart item table, and triggers the loading of the new cart items list. The result will be returned to cartItemsResponse
+     * @param currentCartItem
+     */
     public void deleteCartItem(final CurrentCartItem currentCartItem) {
         CompletableFuture.runAsync(() -> {
             int l = mainRepository.deleteCurrentCartItem(currentCartItem);

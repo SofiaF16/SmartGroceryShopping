@@ -13,6 +13,9 @@ import dagger.hilt.InstallIn;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import dagger.hilt.components.SingletonComponent;
 
+/**
+ * Module class providing the database access through the Room library
+ */
 @Module
 @InstallIn(SingletonComponent.class)
 public class StorageModule {

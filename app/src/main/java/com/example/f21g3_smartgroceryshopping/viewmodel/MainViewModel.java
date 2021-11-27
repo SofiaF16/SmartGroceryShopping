@@ -40,14 +40,23 @@ public class MainViewModel extends ViewModel {
         loadDishes();
     }
 
+    /**
+     * @return liveData object holding the result of completion of loadDishes()
+     */
     public LiveData<LoadResponse<List<Dish>>> getDishesResponse() {
         return dishesResponse;
     }
 
+    /**
+     * @return liveData object monitoring the current cart size. If the size is updated the object will update the value automatically
+     */
     public LiveData<Integer> getCartSize() {
         return cartItems;
     }
 
+    /**
+     * triggers loading of available dishes and returns the result of the request to dishesResponse LiveData object
+     */
     public void loadDishes(){
         CompletableFuture.runAsync(() -> {
             dishesResponse.postValue(new LoadingLoadResponse<>(new ArrayList<>()));
@@ -78,6 +87,9 @@ public class MainViewModel extends ViewModel {
         return result;
     }
 
+    /**
+     * Clears all cart items
+     */
     public void clearCart() {
         CompletableFuture.runAsync(mainRepository::deleteAllCartItems);
     }

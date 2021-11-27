@@ -1,5 +1,9 @@
 package com.example.f21g3_smartgroceryshopping.response;
 
+/**
+ * Generic class used to receive the response from backend or local storage as well as the error object in case some issues arised during conducting
+ * of the operation
+ */
 public class RepositoryResponse<Response> {
 
     private Response response;

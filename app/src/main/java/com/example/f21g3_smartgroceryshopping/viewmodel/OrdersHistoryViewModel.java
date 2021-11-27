@@ -41,15 +41,23 @@ public class OrdersHistoryViewModel extends ViewModel {
         this.mainRepository = mainRepository;
     }
 
-
+    /**
+     * @return liveData object holding the result of completion of loadOrders()
+     */
     public LiveData<LoadResponse<List<Order>>> getOrderResponse() {
         return ordersResponse;
     }
 
+    /**
+     * @return liveData object holding the result of completion of updateCartWith()
+     */
     public LiveData<LoadResponse<Long>> getUpdateCartResponse() {
         return updateCartResponse;
     }
 
+    /**
+     * Triggers loading of all orders from the history database. The result will be returned to ordersResponse
+     */
     public void loadOrders() {
         CompletableFuture.runAsync(() -> {
             RepositoryResponse<List<StorageOrderWithOrderItems>> allOrders = mainRepository.getAllOrders();
@@ -93,6 +101,10 @@ public class OrdersHistoryViewModel extends ViewModel {
         return new OrderItem(storageOrderItem.dishId, storageOrderItem.dishTitle, storageOrderItem.portions);
     }
 
+    /**
+     *  Adds the order items in the 'order' to the cart table. If the cart was not empty -
+     *  it will be cleaned first before adding items from the current order. The result of this operation will be returned to updateCartResponse
+     */
     public void updateCartWith(final Order order) {
         CompletableFuture.runAsync(() -> {
             updateCartResponse.postValue(new LoadingLoadResponse<>(UPDATE_CART_LOADING));

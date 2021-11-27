@@ -9,6 +9,9 @@ import dagger.Provides;
 import dagger.hilt.InstallIn;
 import dagger.hilt.components.SingletonComponent;
 
+/**
+ * Module class providing the object to calculate total list of ingredients in the order
+ */
 @Module
 @InstallIn(SingletonComponent.class)
 public class IngredientsMakerModule {

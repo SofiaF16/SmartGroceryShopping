@@ -47,22 +47,38 @@ public class DishDetailsViewModel extends ViewModel {
         cartItems = Transformations.map(this.mainRepository.getCartItemsLiveData(), List::size);
     }
 
+    /**
+     * @return liveData object monitoring the current cart size. If the size is updated the object will update the value automatically
+     */
     public LiveData<Integer> getCartSize() {
         return cartItems;
     }
 
+    /**
+     * @return liveData object holding the result of the completion of loadDish();
+     */
     public LiveData<LoadResponse<Dish>> getDish() {
         return dishResponse;
     }
 
+    /**
+     * @return liveData object holding the result of the completion of addToCart();
+     */
     public LiveData<LoadResponse<Long>> addToCartResponse() {
         return addToCartResponse;
     }
 
+    /**
+     * @return liveData object holding the current portions of the dish if the given dish was already added to the cart. Details of this dish were loaded in loadDish();
+     */
     public LiveData<LoadResponse<Integer>> getDishPortionsNumberResponse() {
         return dishPortionsNumberResponse;
     }
 
+    /**
+     * Triggers loading of a certain dish details stored in the local storage and returns the result to dishResponse and dishPortionsNumberResponse
+     * @param dishId the id of dish details of which should be loaded
+     */
     public void loadDish(final int dishId) {
         CompletableFuture.runAsync(() -> {
             RepositoryResponse<StorageDishWithIngredients> storageDishResponse = mainRepository.getStorageDishBy(dishId);
@@ -94,6 +110,12 @@ public class DishDetailsViewModel extends ViewModel {
         }
     }
 
+    /**
+     * Adds the dish to the cart table and returns the result of this operation to addToCartResponse
+     * @param dishId id of the dish to add to the cart
+     * @param dishTitle title of the dish to add to the cart
+     * @param portionsNumber umber of portions
+     */
     public void addToCart(final int dishId, final String dishTitle, final int portionsNumber) {
         CompletableFuture.runAsync(() -> {
             addToCartResponse.postValue(new LoadingLoadResponse<>(ADD_TO_CART_LOADING));

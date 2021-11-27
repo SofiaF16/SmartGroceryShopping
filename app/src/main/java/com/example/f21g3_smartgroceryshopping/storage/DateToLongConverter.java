@@ -4,6 +4,9 @@ import androidx.room.TypeConverter;
 
 import java.util.Date;
 
+/**
+ * Class helping to convert long rows in the local storage table to the java.util.Date java objects
+ */
 public class DateToLongConverter {
 
     @TypeConverter

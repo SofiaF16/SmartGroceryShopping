@@ -21,6 +21,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+/**
+ * A class connected to the backend and room dao which serves as a middle class between the datasource and view model objects
+ * All calls either to backend or to the local storage must be done through this class
+ */
 public class MainRepository {
 
     private final SmartGroceryShoppingService shoppingService;

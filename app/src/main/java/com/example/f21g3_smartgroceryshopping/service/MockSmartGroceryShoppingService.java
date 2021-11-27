@@ -7,6 +7,9 @@ import com.example.f21g3_smartgroceryshopping.storage.entity.StorageOrderWithOrd
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The backend implementation helping to test the app offline
+ */
 public class MockSmartGroceryShoppingService implements SmartGroceryShoppingService {
 
     private static final long SLEEP_TIME = 3000;

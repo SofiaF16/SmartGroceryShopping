@@ -57,12 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         toolbarMain.setOnMenuItemClickListener((MenuItem item) -> {
             if (item.getItemId() == R.id.iconToolbarCart) {
-                if (mainViewModel.getCartSize().getValue() != 0) {
-                    CartActivity.launch(MainActivity.this);
-                } else {
-                    Toast.makeText(MainActivity.this,
-                            "The Cart Is Empty. \nPlease Add A Dish And Try Again.", Toast.LENGTH_LONG).show();
-                }
+                transferToCartActivity();
             }
             return true;
         });
@@ -70,13 +65,6 @@ public class MainActivity extends AppCompatActivity {
         cartSizeTextView = findViewById(R.id.textViewCartSizeMain);
 
         swipeContainer = findViewById(R.id.swipeContainer);
-
-        //to be implemented
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-            }
-        });
 
         recyclerViewMeals = findViewById(R.id.recyclerViewMeals);
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -91,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewMeals.setAdapter(dishRecyclerViewAdapter);
 
         fabBasket = findViewById(R.id.fabBasket);
-        fabBasket.setOnClickListener((View view) -> CartActivity.launch(MainActivity.this));
+        fabBasket.setOnClickListener((View view) -> transferToCartActivity());
 
         bottomNavigationView = findViewById(R.id.navigation);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -120,6 +108,22 @@ public class MainActivity extends AppCompatActivity {
 
         subscribeOnGetCartSizeResponse();
         subscribeOnDishesResponse();
+    }
+
+    private void transferToCartActivity() {
+        if (getCartSize() != 0) {
+            CartActivity.launch(MainActivity.this);
+        } else {
+            Toast.makeText(MainActivity.this, getString(R.string.error_empty_car), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private int getCartSize() {
+        try {
+            return Integer.parseInt(cartSizeTextView.getText().toString());
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     private void subscribeOnGetCartSizeResponse() {

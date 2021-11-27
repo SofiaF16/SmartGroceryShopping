@@ -61,13 +61,7 @@ public class DishDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbarDishDetails);
         toolbarDishDetails.setOnMenuItemClickListener((MenuItem item) -> {
             if (item.getItemId() == R.id.iconToolbarCart) {
-                if (dishDetailsViewModel.getCartSize().getValue() != 0) {
-                    CartActivity.launch(DishDetailsActivity.this);
-                    finish();
-                } else {
-                    Toast.makeText(DishDetailsActivity.this,
-                            "The Cart Is Empty. \nPlease Add A Dish And Try Again.", Toast.LENGTH_LONG).show();
-                }
+                transferToCartActivity();
             }
             return true;
         });
@@ -107,6 +101,23 @@ public class DishDetailsActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             dishDetailsViewModel.loadDish(dishId);
+        }
+    }
+
+    private void transferToCartActivity() {
+        if (getCartSize() != 0) {
+            CartActivity.launch(DishDetailsActivity.this);
+            finish();
+        } else {
+            Toast.makeText(DishDetailsActivity.this, getString(R.string.error_empty_car), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private int getCartSize() {
+        try {
+            return Integer.parseInt(textViewCartSize.getText().toString());
+        } catch (Exception e) {
+            return 0;
         }
     }
 

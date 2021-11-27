@@ -34,5 +34,6 @@
     <string name="error_order_history_load">Error of order history loading</string>
     <string name="item_updated_message">Item updated</string>
     <string name="empty_cart_error_message">Cart is empty! Add some dishes first!</string>
+    <string name="error_empty_car">The Cart Is Empty. \nPlease Add A Dish And Try Again.</string>
 
 </resources>

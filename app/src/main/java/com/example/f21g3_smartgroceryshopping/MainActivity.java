@@ -108,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
 
         subscribeOnGetCartSizeResponse();
         subscribeOnDishesResponse();
+
+        if (savedInstanceState == null) {
+            mainViewModel.loadDishes();
+        }
     }
 
     private void transferToCartActivity() {

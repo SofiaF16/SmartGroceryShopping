@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayoutManager linearLayoutManager;
     private DishRecyclerViewAdapter dishRecyclerViewAdapter;
     private FloatingActionButton fabBasket;
-    private List<Dish> DishList = new ArrayList<>();
     private MainViewModel mainViewModel;
 
     private BottomNavigationView bottomNavigationView;
@@ -70,41 +69,29 @@ public class MainActivity extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerViewMeals.setLayoutManager(linearLayoutManager);
 
-        dishRecyclerViewAdapter = new DishRecyclerViewAdapter(new DishRecyclerViewAdapter.OnDishClickListener() {
-            @Override
-            public void onDishClick(Dish dish) {
-                DishDetailsActivity.launch(MainActivity.this, dish.getUid());
-            }
-        });
+        dishRecyclerViewAdapter = new DishRecyclerViewAdapter(dish ->
+                DishDetailsActivity.launch(MainActivity.this, dish.getUid()));
         recyclerViewMeals.setAdapter(dishRecyclerViewAdapter);
 
         fabBasket = findViewById(R.id.fabBasket);
         fabBasket.setOnClickListener((View view) -> transferToCartActivity());
 
         bottomNavigationView = findViewById(R.id.navigation);
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.actionHistory:
-                        OrdersHistoryActivity.launch(MainActivity.this);
-                        break;
-                    case R.id.actionClearCart:
-                        mainViewModel.clearCart();
-                        break;
-                }
-                return true;
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.actionHistory:
+                    OrdersHistoryActivity.launch(MainActivity.this);
+                    break;
+                case R.id.actionClearCart:
+                    mainViewModel.clearCart();
+                    break;
             }
+            return true;
         });
 
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mainViewModel.loadDishes();
-            }
-        });
+        swipeContainer.setOnRefreshListener(() -> mainViewModel.loadDishes());
 
         subscribeOnGetCartSizeResponse();
         subscribeOnDishesResponse();
@@ -131,25 +118,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void subscribeOnGetCartSizeResponse() {
-        mainViewModel.getCartSize().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer cartSize) {
-                if(cartSize == 0) {
-                    cartSizeTextView.setText(R.string.empty_cart);
-                } else {
-                    cartSizeTextView.setText(String.valueOf(cartSize));
-                }
+        mainViewModel.getCartSize().observe(this, cartSize -> {
+            if(cartSize == 0) {
+                cartSizeTextView.setText(R.string.empty_cart);
+            } else {
+                cartSizeTextView.setText(String.valueOf(cartSize));
             }
         });
     }
 
     private void subscribeOnDishesResponse() {
-        mainViewModel.getDishesResponse().observe(this, new Observer<LoadResponse<List<Dish>>>() {
-            @Override
-            public void onChanged(LoadResponse<List<Dish>> dishLoadResponse) {
-                handleResponse(dishLoadResponse);
-            }
-        });
+        mainViewModel.getDishesResponse().observe(this, dishLoadResponse ->
+                handleResponse(dishLoadResponse));
     }
 
     private void handleResponse(LoadResponse<List<Dish>> dishLoadResponse) {

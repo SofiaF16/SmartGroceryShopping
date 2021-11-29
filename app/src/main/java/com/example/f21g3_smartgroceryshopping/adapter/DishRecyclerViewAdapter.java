@@ -11,7 +11,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.f21g3_smartgroceryshopping.DishDetailsActivity;
 import com.example.f21g3_smartgroceryshopping.R;
 import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 
@@ -48,11 +47,6 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
                 .placeholder(R.drawable.error_loand_image)
                 .into(dishViewHolder.dishPic);
 
-
-        /*dishViewHolder.itemView.setOnClickListener((View view) -> {
-        // open another activity on item click
-            DishDetailsActivity.launch(dishViewHolder.dishPic.getContext(), position);
-        });*/
     }
 
     @Override
@@ -79,11 +73,6 @@ public class DishRecyclerViewAdapter extends RecyclerView.Adapter<DishRecyclerVi
         public void onClick(View view) {
             onDishClickListener.onDishClick(DishList.get(getBindingAdapterPosition()));
         }
-    }
-
-    public void clear() {
-        DishList.clear();
-        notifyDataSetChanged();
     }
 
     public void addAll(List<Dish> list) {

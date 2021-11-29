@@ -31,6 +31,7 @@
         android:layout_height="match_parent"
         android:layout_margin="8dp"
         android:layout_weight="0.35"
+        android:backgroundTint="#006C5F"
         android:text="@string/btnUpdateText" />
 
     <ImageView

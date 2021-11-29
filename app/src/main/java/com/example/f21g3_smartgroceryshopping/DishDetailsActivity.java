@@ -36,11 +36,8 @@ public class DishDetailsActivity extends AppCompatActivity {
 
     private int dishId;
     private Dish dish;
-    private int numberOfPortions;
-    private ConstraintLayout dishDetailsLayout;
     private Toolbar toolbarDishDetails;
     private FloatingActionButton fabAddDish;
-    private CardView cardViewDish;
     private ImageView dishImage;
     private TextView dishName;
     private TextView dishDesc;
@@ -70,7 +67,6 @@ public class DishDetailsActivity extends AppCompatActivity {
             finish();
         });
 
-        cardViewDish = findViewById(R.id.cardViewDish);
         dishImage = findViewById(R.id.imageViewDishDetails);
         dishName = findViewById(R.id.textViewDetailsDishName);
         dishDesc = findViewById(R.id.textViewDetailsDishDesc);
@@ -84,7 +80,6 @@ public class DishDetailsActivity extends AppCompatActivity {
 
         numberOfPortionsPicker.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> {
             numberOfPortionsPicker.setValue(newVal);
-            numberOfPortions = newVal;
         });
 
         fabAddDish.setOnClickListener((View view) -> {
@@ -109,7 +104,8 @@ public class DishDetailsActivity extends AppCompatActivity {
             CartActivity.launch(DishDetailsActivity.this);
             finish();
         } else {
-            Toast.makeText(DishDetailsActivity.this, getString(R.string.error_empty_car), Toast.LENGTH_LONG).show();
+            Toast.makeText(DishDetailsActivity.this,
+                            getString(R.string.error_empty_car), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -128,46 +124,31 @@ public class DishDetailsActivity extends AppCompatActivity {
     }
 
     private void subscribeOnDishPortions() {
-        dishDetailsViewModel.getDishPortionsNumberResponse().observe(this, new Observer<LoadResponse<Integer>>() {
-            @Override
-            public void onChanged(LoadResponse<Integer> integerLoadResponse) {
-                if(integerLoadResponse.getResponse() != null && integerLoadResponse.getResponse() > 0) {
-                    numberOfPortionsPicker.setValue(integerLoadResponse.getResponse());
-                }
+        dishDetailsViewModel.getDishPortionsNumberResponse().observe(this, integerLoadResponse -> {
+            if(integerLoadResponse.getResponse() != null && integerLoadResponse.getResponse() > 0) {
+                numberOfPortionsPicker.setValue(integerLoadResponse.getResponse());
             }
         });
     }
 
     private void subscribeOnGetCartSizeResponse() {
-        dishDetailsViewModel.getCartSize().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer cartSize) {
-                if(cartSize == 0) {
-                    textViewCartSize.setText(R.string.empty_cart);
-                } else {
-                    textViewCartSize.setText(String.valueOf(cartSize));
-                }
+        dishDetailsViewModel.getCartSize().observe(this, cartSize -> {
+            if(cartSize == 0) {
+                textViewCartSize.setText(R.string.empty_cart);
+            } else {
+                textViewCartSize.setText(String.valueOf(cartSize));
             }
         });
     }
 
     private void subscribeOnAddDishResponse() {
-        dishDetailsViewModel.addToCartResponse().observe(this, new Observer<LoadResponse<Long>>() {
-            @Override
-            public void onChanged(LoadResponse<Long> longLoadResponse) {
-                handleAddDishResponse(longLoadResponse);
-            }
-        });
+        dishDetailsViewModel.addToCartResponse().observe(this, longLoadResponse ->
+                handleAddDishResponse(longLoadResponse));
     }
 
     private void subscribeOnDishLoadResponse() {
-
-        dishDetailsViewModel.getDish().observe(this, new Observer<LoadResponse<Dish>>() {
-            @Override
-            public void onChanged(LoadResponse<Dish> dishLoadResponse) {
-                handleDishLoadResponse(dishLoadResponse);
-            }
-        });
+        dishDetailsViewModel.getDish().observe(this, dishLoadResponse ->
+                handleDishLoadResponse(dishLoadResponse));
     }
 
     private void handleDishLoadResponse(LoadResponse<Dish> dishResponse) {
@@ -193,7 +174,8 @@ public class DishDetailsActivity extends AppCompatActivity {
         }
 
         if(dishResponse instanceof ErrorLoadResponse) {
-            Toast.makeText(DishDetailsActivity.this, getString(R.string.error_dish_information_load), Toast.LENGTH_SHORT).show();
+            Toast.makeText(DishDetailsActivity.this,
+                            getString(R.string.error_dish_information_load), Toast.LENGTH_SHORT).show();
             return;
         }
     }

@@ -139,7 +139,7 @@ public class CartActivity extends AppCompatActivity {
         subscribeOnIngredientListResponse();
         subscribeOnPostOrderStatusResponse();
 
-        //prevent the activity from being destroyed and recreated while the device is rotated
+        //do not trigger data loading if the device was rotated
         if (savedInstanceState == null) {
             cartViewModel.loadCartItems();
         }
@@ -151,7 +151,7 @@ public class CartActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
-    //method to subscribe on the event, which accepts the result of getCartItemsResponse()
+    //method to subscribe on the event, which accepts the result of cartViewModel.loadCartItems()
     private void subscribeOnCartItemsResponse(){
         cartViewModel.getCartItemsResponse().observe(this, new Observer<LoadResponse<List<CartItem>>>() {
             @Override
@@ -160,7 +160,7 @@ public class CartActivity extends AppCompatActivity {
             }
         });
     }
-    //method to subscribe on the event, which accepts the result of getIngredientsListResponse()
+    //method to subscribe on the event, which accepts the result of ingredients list generation
     private void subscribeOnIngredientListResponse(){
         cartViewModel.getIngredientsListResponse().observe(this, new Observer<LoadResponse<List<Ingredient>>>() {
             @Override
@@ -169,7 +169,7 @@ public class CartActivity extends AppCompatActivity {
             }
         });
     }
-    //method to subscribe on the event, which accepts the result of getPostOrderStatusResponse()
+    //method to subscribe on the event, which accepts the result of order processing
     private void subscribeOnPostOrderStatusResponse(){
         cartViewModel.getPostOrderStatusResponse().observe(this, new Observer<LoadResponse<String>>() {
             @Override

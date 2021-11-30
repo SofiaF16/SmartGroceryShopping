@@ -61,7 +61,7 @@ public class OrdersHistoryActivity extends AppCompatActivity {
         });
         subscribeOnOrderHistoryResponse();
         subscribeOnUpdateCartResponse();
-
+        //do not trigger data loading if the device was rotated
         if (savedInstanceState == null) {
             ordersHistoryViewModel.loadOrders();
         }
@@ -80,7 +80,7 @@ public class OrdersHistoryActivity extends AppCompatActivity {
             }
         });
     }
-    //method to subscribe on the event, which accepts the result of getUpdateCartResponse()
+    //method to subscribe on the event, which accepts the result of order item updating
     private void subscribeOnUpdateCartResponse(){
         ordersHistoryViewModel.getUpdateCartResponse().observe(this, new Observer<LoadResponse<Long>>() {
             @Override

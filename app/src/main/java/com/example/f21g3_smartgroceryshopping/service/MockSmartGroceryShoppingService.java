@@ -107,15 +107,15 @@ public class MockSmartGroceryShoppingService implements SmartGroceryShoppingServ
 
         // Fourth Dish
 
-        Ingredient sweetPotato = new Ingredient(19, "sweet potato", 50, "g");
-        Ingredient sugar = new Ingredient(20, "sugar", 33, "g");
-        Ingredient eggs3 = new Ingredient(21, "eggs", 1, "item");
-        Ingredient salt4 = new Ingredient(22, "salt", 5, "g");
-        Ingredient flour2 = new Ingredient(22, "salt", 11, "g");
-        Ingredient butter = new Ingredient(23, "butter", 16, "ml");
-        Ingredient milk = new Ingredient(24, "milk", 18, "g");
-        Ingredient vanillaExtract = new Ingredient(25, "vanilla extract", 4, "g");
-        Ingredient pecans = new Ingredient(26, "black pepper", 9, "g");
+        Ingredient sweetPotato = new Ingredient(26, "sweet potato", 50, "g");
+        Ingredient sugar = new Ingredient(27, "sugar", 33, "g");
+        Ingredient eggs3 = new Ingredient(28, "eggs", 1, "item");
+        Ingredient salt4 = new Ingredient(29, "salt", 5, "g");
+        Ingredient flour2 = new Ingredient(30, "salt", 11, "g");
+        Ingredient butter = new Ingredient(31, "butter", 16, "ml");
+        Ingredient milk = new Ingredient(32, "milk", 18, "g");
+        Ingredient vanillaExtract = new Ingredient(33, "vanilla extract", 4, "g");
+        Ingredient pecans = new Ingredient(34, "black pepper", 9, "g");
 
 
         List<Ingredient> fourthDishIngredients = new ArrayList<>();

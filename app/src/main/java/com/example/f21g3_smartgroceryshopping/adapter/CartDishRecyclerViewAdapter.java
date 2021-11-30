@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.f21g3_smartgroceryshopping.R;
 import com.example.f21g3_smartgroceryshopping.service.entity.CartItem;
-import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,6 @@ public class CartDishRecyclerViewAdapter extends RecyclerView.Adapter<CartDishRe
         this.onCartDishDeleteClickListener = onCartDishDeleteClickListener;
         this.onCartDishUpdateClickListener = onCartDishUpdateClickListener;
     }
-
 
     @NonNull
     @Override
@@ -62,21 +60,16 @@ public class CartDishRecyclerViewAdapter extends RecyclerView.Adapter<CartDishRe
             numOfDishes = itemView.findViewById(R.id.editTextNumOfDishes);
             btnUpdate = itemView.findViewById(R.id.btnUpdate);
             imgCancel = itemView.findViewById(R.id.imgViewCancel);
-            btnUpdate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            btnUpdate.setOnClickListener((View view) -> {
                     onCartDishUpdateClickListener.onCartDishClickUpdate(CartItemList.get(getBindingAdapterPosition()),
                             Integer.parseInt(numOfDishes.getText().toString()));
-                }
+
             });
 
-            imgCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            imgCancel.setOnClickListener((View view) -> {
                     onCartDishDeleteClickListener.onCartDishClickDelete(CartItemList.get(getBindingAdapterPosition()));
-                }
-            });
 
+            });
         }
     }
     public void addAll(List<CartItem> list) {

@@ -11,25 +11,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
+
 import android.widget.Toast;
 
-import com.example.f21g3_smartgroceryshopping.adapter.DishRecyclerViewAdapter;
+
 import com.example.f21g3_smartgroceryshopping.adapter.HistoryRecyclerViewAdapter;
 import com.example.f21g3_smartgroceryshopping.response.ErrorLoadResponse;
 import com.example.f21g3_smartgroceryshopping.response.LoadResponse;
-import com.example.f21g3_smartgroceryshopping.response.LoadingLoadResponse;
 import com.example.f21g3_smartgroceryshopping.response.SuccessLoadResponse;
-import com.example.f21g3_smartgroceryshopping.service.entity.CartItem;
-import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
-import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 import com.example.f21g3_smartgroceryshopping.service.entity.Order;
-import com.example.f21g3_smartgroceryshopping.service.entity.OrderItem;
 import com.example.f21g3_smartgroceryshopping.viewmodel.OrdersHistoryViewModel;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -38,8 +30,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class OrdersHistoryActivity extends AppCompatActivity {
 
     private OrdersHistoryViewModel ordersHistoryViewModel;
-
-
     private Toolbar toolbar;
     private RecyclerView recyclerViewHistory;
     private LinearLayoutManager linearLayoutManager;
@@ -55,17 +45,13 @@ public class OrdersHistoryActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbarHistory);
         toolbar.setTitle(R.string.app_name);
         toolbar.setNavigationIcon(R.drawable.back_arrow);
-        setSupportActionBar(toolbar);
-
+        setSupportActionBar(toolbar); //sets the toolbar as the app bar for the activity
 
         recyclerViewHistory = findViewById(R.id.recyclerViewHistory);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerViewHistory.setLayoutManager(linearLayoutManager);
-        historyRecyclerViewAdapter = new HistoryRecyclerViewAdapter(new HistoryRecyclerViewAdapter.OnOrderHistoryClickListener() {
-            @Override
-            public void onOrderHistoryClick(Order order) {
+        historyRecyclerViewAdapter = new HistoryRecyclerViewAdapter((Order order) -> {
                 ordersHistoryViewModel.updateCartWith(order);
-            }
         });
 
         recyclerViewHistory.setAdapter(historyRecyclerViewAdapter);
@@ -83,10 +69,9 @@ public class OrdersHistoryActivity extends AppCompatActivity {
 
     public static void launch(Context context) {
         Intent intent = new Intent(context, OrdersHistoryActivity.class);
-
         context.startActivity(intent);
     }
-
+    //method to subscribe on the event, which accepts the result of getOrderResponse()
     private void subscribeOnOrderHistoryResponse(){
         ordersHistoryViewModel.getOrderResponse().observe(this, new Observer<LoadResponse<List<Order>>>() {
             @Override
@@ -95,7 +80,7 @@ public class OrdersHistoryActivity extends AppCompatActivity {
             }
         });
     }
-
+    //method to subscribe on the event, which accepts the result of getUpdateCartResponse()
     private void subscribeOnUpdateCartResponse(){
         ordersHistoryViewModel.getUpdateCartResponse().observe(this, new Observer<LoadResponse<Long>>() {
             @Override

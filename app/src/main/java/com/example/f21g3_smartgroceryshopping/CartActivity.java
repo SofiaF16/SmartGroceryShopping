@@ -11,11 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.f21g3_smartgroceryshopping.adapter.CartDishRecyclerViewAdapter;
@@ -26,13 +23,11 @@ import com.example.f21g3_smartgroceryshopping.response.LoadingLoadResponse;
 import com.example.f21g3_smartgroceryshopping.response.SuccessLoadResponse;
 import com.example.f21g3_smartgroceryshopping.service.entity.CartItem;
 import com.example.f21g3_smartgroceryshopping.service.entity.CurrentCartItem;
-import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 import com.example.f21g3_smartgroceryshopping.viewmodel.CartViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -70,10 +65,11 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+
         toolbar = findViewById(R.id.toolbarCart);
         toolbar.setTitle(R.string.app_name);
         toolbar.setNavigationIcon(R.drawable.back_arrow);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar); //sets the toolbar as the app bar for the activity
 
         orderDishesLayout = findViewById(R.id.layoutOrderDishes);
         recyclerViewDishes = findViewById(R.id.recyclerViewDishes);
@@ -86,6 +82,7 @@ public class CartActivity extends AppCompatActivity {
 
         linearLayoutManagerDish = new LinearLayoutManager(this);
         recyclerViewDishes.setLayoutManager(linearLayoutManagerDish);
+
         cartDishRecyclerViewAdapter = new CartDishRecyclerViewAdapter(new CartDishRecyclerViewAdapter.OnCartDishDeleteClickListener() {
             @Override
             public void onCartDishClickDelete(CartItem cartItem) {
@@ -98,6 +95,7 @@ public class CartActivity extends AppCompatActivity {
                 Toast.makeText(CartActivity.this, getString(R.string.item_updated_message), Toast.LENGTH_SHORT).show();
             }
         });
+
         recyclerViewDishes.setAdapter(cartDishRecyclerViewAdapter);
 
         linearLayoutManagerIngredient = new LinearLayoutManager(this);
@@ -141,6 +139,7 @@ public class CartActivity extends AppCompatActivity {
         subscribeOnIngredientListResponse();
         subscribeOnPostOrderStatusResponse();
 
+        //prevent the activity from being destroyed and recreated while the device is rotated
         if (savedInstanceState == null) {
             cartViewModel.loadCartItems();
         }
@@ -152,6 +151,7 @@ public class CartActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
+    //method to subscribe on the event, which accepts the result of getCartItemsResponse()
     private void subscribeOnCartItemsResponse(){
         cartViewModel.getCartItemsResponse().observe(this, new Observer<LoadResponse<List<CartItem>>>() {
             @Override
@@ -160,7 +160,7 @@ public class CartActivity extends AppCompatActivity {
             }
         });
     }
-
+    //method to subscribe on the event, which accepts the result of getIngredientsListResponse()
     private void subscribeOnIngredientListResponse(){
         cartViewModel.getIngredientsListResponse().observe(this, new Observer<LoadResponse<List<Ingredient>>>() {
             @Override
@@ -169,7 +169,7 @@ public class CartActivity extends AppCompatActivity {
             }
         });
     }
-
+    //method to subscribe on the event, which accepts the result of getPostOrderStatusResponse()
     private void subscribeOnPostOrderStatusResponse(){
         cartViewModel.getPostOrderStatusResponse().observe(this, new Observer<LoadResponse<String>>() {
             @Override
@@ -178,7 +178,6 @@ public class CartActivity extends AppCompatActivity {
             }
         });
     }
-
 
     private void handleCartItemsResponse(LoadResponse<List<CartItem>> listLoadResponse) {
 
@@ -220,6 +219,7 @@ public class CartActivity extends AppCompatActivity {
             orderProcessingLayout.setVisibility(View.VISIBLE);
             orderBtn.setVisibility(View.GONE);
         }
+
         if(stringLoadResponse instanceof SuccessLoadResponse) {
             if(stringLoadResponse.getResponse() != null) {
                 orderSuccessLayout.setVisibility(View.VISIBLE);

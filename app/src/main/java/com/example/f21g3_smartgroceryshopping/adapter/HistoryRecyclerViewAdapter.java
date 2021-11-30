@@ -1,6 +1,5 @@
 package com.example.f21g3_smartgroceryshopping.adapter;
 
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,15 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.f21g3_smartgroceryshopping.R;
-import com.example.f21g3_smartgroceryshopping.service.entity.CartItem;
-import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Order;
 import com.example.f21g3_smartgroceryshopping.service.entity.OrderItem;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -27,7 +23,6 @@ public class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecy
     private List<Order> OrdersList;
     private List<OrderItem> OrderItemList;
     private OnOrderHistoryClickListener onOrderHistoryClickListener;
-
 
     public HistoryRecyclerViewAdapter(OnOrderHistoryClickListener onOrderHistoryClickListener) {
         this.onOrderHistoryClickListener = onOrderHistoryClickListener;

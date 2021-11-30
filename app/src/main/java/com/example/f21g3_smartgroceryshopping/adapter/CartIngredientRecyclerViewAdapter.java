@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.f21g3_smartgroceryshopping.R;
-import com.example.f21g3_smartgroceryshopping.service.entity.Dish;
 import com.example.f21g3_smartgroceryshopping.service.entity.Ingredient;
 
 import java.util.ArrayList;
@@ -22,8 +21,6 @@ public class CartIngredientRecyclerViewAdapter extends RecyclerView.Adapter<Cart
     public CartIngredientRecyclerViewAdapter() {
         IngredientList = new ArrayList<>();
     }
-
-
 
     @NonNull
     @Override

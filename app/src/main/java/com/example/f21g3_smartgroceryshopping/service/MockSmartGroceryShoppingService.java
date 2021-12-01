@@ -27,7 +27,7 @@ public class MockSmartGroceryShoppingService implements SmartGroceryShoppingServ
         Ingredient parsley = new Ingredient(7, "parsley", 10, "g");
         Ingredient onion = new Ingredient(8, "onion", 20, "g");
         Ingredient water = new Ingredient(9, "water", 30, "g");
-        Ingredient oliveOil = new Ingredient(10, "oliveOil", 0.18, "l");
+        Ingredient oliveOil = new Ingredient(10, "olive oil", 0.18, "l");
 
         List<Ingredient> firstDishIngredients = new ArrayList<>();
         firstDishIngredients.add(pork);
@@ -80,7 +80,7 @@ public class MockSmartGroceryShoppingService implements SmartGroceryShoppingServ
 
         // Third dish
 
-        Ingredient oliveOil2 = new Ingredient(19, "oliveOil", 1, "tbsp");
+        Ingredient oliveOil2 = new Ingredient(19, "olive oil", 1, "tbsp");
         Ingredient bacon = new Ingredient(20, "bacon", 60, "g");
         Ingredient garlic  = new Ingredient(21, "garlic ", 1, "clove");
         Ingredient eggs2 = new Ingredient(22, "eggs", 1, "item");

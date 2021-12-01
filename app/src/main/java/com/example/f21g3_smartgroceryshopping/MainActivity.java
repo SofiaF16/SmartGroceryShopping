@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbarMain);
 
         toolbarMain.setOnMenuItemClickListener((MenuItem item) -> {
+            //check if clicked item in toolbar is cart icon and proceed to CartActivity
             if (item.getItemId() == R.id.iconToolbarCart) {
                 transferToCartActivity();
             }
@@ -96,12 +97,14 @@ public class MainActivity extends AppCompatActivity {
         subscribeOnGetCartSizeResponse();
         subscribeOnDishesResponse();
 
+        //do not trigger data loading if the device was rotated
         if (savedInstanceState == null) {
             mainViewModel.loadDishes();
         }
     }
 
     private void transferToCartActivity() {
+        //proceed to CartActivity only if cart is not empty
         if (getCartSize() != 0) {
             CartActivity.launch(MainActivity.this);
         } else {
@@ -117,8 +120,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //method to subscribe on the event, which accepts the result of LiveData object with the size of cart
     private void subscribeOnGetCartSizeResponse() {
         mainViewModel.getCartSize().observe(this, cartSize -> {
+            //update the cart size TextView in toolbar
             if(cartSize == 0) {
                 cartSizeTextView.setText(R.string.empty_cart);
             } else {
@@ -127,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //method to subscribe on the event, which accepts the result of dish list loading
     private void subscribeOnDishesResponse() {
         mainViewModel.getDishesResponse().observe(this, dishLoadResponse ->
                 handleResponse(dishLoadResponse));

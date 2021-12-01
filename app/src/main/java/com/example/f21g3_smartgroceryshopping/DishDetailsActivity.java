@@ -57,12 +57,14 @@ public class DishDetailsActivity extends AppCompatActivity {
         toolbarDishDetails.setNavigationIcon(R.drawable.back_arrow);
         setSupportActionBar(toolbarDishDetails);
         toolbarDishDetails.setOnMenuItemClickListener((MenuItem item) -> {
+            //check if clicked item in toolbar is cart icon and proceed to CartActivity
             if (item.getItemId() == R.id.iconToolbarCart) {
                 transferToCartActivity();
             }
             return true;
         });
 
+        //close the current activity when arrow icon in toolbar is clicked
         toolbarDishDetails.setNavigationOnClickListener((View view) -> {
             finish();
         });
@@ -94,12 +96,14 @@ public class DishDetailsActivity extends AppCompatActivity {
         subscribeOnAddDishResponse();
         subscribeOnGetCartSizeResponse();
 
+        //do not trigger data loading if the device was rotated
         if (savedInstanceState == null) {
             dishDetailsViewModel.loadDish(dishId);
         }
     }
 
     private void transferToCartActivity() {
+        //proceed to CartActivity only if cart is not empty
         if (getCartSize() != 0) {
             CartActivity.launch(DishDetailsActivity.this);
             finish();
@@ -123,7 +127,9 @@ public class DishDetailsActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
+    //method to subscribe on the event, which accepts the result of LiveData object with the number of portions
     private void subscribeOnDishPortions() {
+        //update the value of NumberPicker
         dishDetailsViewModel.getDishPortionsNumberResponse().observe(this, integerLoadResponse -> {
             if(integerLoadResponse.getResponse() != null && integerLoadResponse.getResponse() > 0) {
                 numberOfPortionsPicker.setValue(integerLoadResponse.getResponse());
@@ -131,7 +137,9 @@ public class DishDetailsActivity extends AppCompatActivity {
         });
     }
 
+    //method to subscribe on the event, which accepts the result of LiveData object with the size of cart
     private void subscribeOnGetCartSizeResponse() {
+        //update the cart size TextView in toolbar
         dishDetailsViewModel.getCartSize().observe(this, cartSize -> {
             if(cartSize == 0) {
                 textViewCartSize.setText(R.string.empty_cart);

@@ -34,7 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
-
+//test
     private TextView cartSizeTextView;
     private Toolbar toolbarMain;
     private SwipeRefreshLayout swipeContainer;

@@ -17,7 +17,7 @@ import dagger.hilt.components.SingletonComponent;
 public class IngredientsMakerModule {
 
     @Provides
-    @Singleton
+    @Singleton //A singleton is a design pattern that restricts the instantiation of a class to only one instance.
     public FullIngredientsListMaker provideIngredientsListMaker() {
         return new FullIngredientsListMaker();
     }

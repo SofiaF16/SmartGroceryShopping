@@ -75,12 +75,13 @@ public class CartViewModel extends ViewModel {
      * triggers the loading of cart items stored in the cart table and returns the result to cartItemsResponse
      */
     public void loadCartItems() {
+        //CompletableFuture analog of thread pool executor
         CompletableFuture.runAsync(this::refreshCartItems);
     }
 
     private void refreshCartItems() {
         RepositoryResponse<List<StorageCurrentCartItemAndDishWithIngredients>> repositoryResponse = mainRepository.getCartItemsWithDishesAndIngredients();
-        LoadResponse<List<CartItem>> loadResponse = prepareResponse(repositoryResponse);
+        LoadResponse<List<CartItem>> loadResponse = prepareResponse(repositoryResponse); //success of loading
         cartItemsResponse.postValue(loadResponse);
     }
 

@@ -30,7 +30,7 @@ public class MainRepository {
     private final SmartGroceryShoppingService shoppingService;
     private final SmartGroceryShoppingDao shoppingDao;
 
-    @Inject
+    @Inject //method annotated with @Inject will only be injected once per injection request per instance
     public MainRepository(SmartGroceryShoppingService shoppingService, SmartGroceryShoppingDao shoppingDao) {
         this.shoppingService = shoppingService;
         this.shoppingDao = shoppingDao;
@@ -40,9 +40,7 @@ public class MainRepository {
         try {
             List<Dish> serviceDishes = shoppingService.getDishes();
             List<StorageDishWithIngredients> storageStorageDishes = toStorageDishWithIngredients(serviceDishes);
-
             shoppingDao.insertAll(storageStorageDishes);
-
             return new RepositoryResponse<>(shoppingDao.getAllDishesWithIngredients());
         } catch (Exception e) {
             return new RepositoryResponse<>(shoppingDao.getAllDishesWithIngredients(), e);

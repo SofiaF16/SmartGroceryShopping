@@ -52,7 +52,7 @@ public class FullIngredientsListMaker {
                 newQuantity,
                 currentIngredient.getQuantityUnit());
     }
-
+//round to 3 decimal places
     private double roundTo(double newQuantity, int numberOfFractionNumbers) {
         double scale = Math.pow(roundCoefficient, numberOfFractionNumbers);
         return Math.round(newQuantity * scale) / scale;

@@ -147,7 +147,6 @@ public class CartActivity extends AppCompatActivity {
 
     public static void launch(Context context) {
         Intent intent = new Intent(context, CartActivity.class);
-
         context.startActivity(intent);
     }
 
